@@ -21,7 +21,24 @@ const photonSharedStyles = html`
     --app-primary-contrast: #ffcc00;
     --app-secondary-color: #162d50;
     --app-secondary-contrast: #ffffff;
+    --mdc-theme-primary: #162d50;
+    --mdc-theme-on-primary: #ffcc00;
   }
+  .row {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
+  .wrap {
+    flex-wrap: wrap;
+  }
+
+  .flex-end {
+    justify-content: flex-end;
+  }
+
 </style>
 `;
 

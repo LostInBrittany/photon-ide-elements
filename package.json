@@ -5,7 +5,8 @@
   "main": "photon-elements.js",
   "dependencies": {
     "@granite-elements/ace-widget": "^2.0.3",
-    "@photon-elements/photon-iron": "^1.1.1",
+    "@material/mwc-button": "^0.1.2",
+    "@photon-elements/photon-iron": "^1.2.0",
     "@polymer/lit-element": "^0.5.2",
     "@polymer/polymer": "^3.0.0"
   },

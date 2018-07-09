@@ -1,0 +1,17 @@
+{
+  "name": "@photon-elements/photon-ide-elements",
+  "homepage": "https://github.com/LostInBrittany/photon-ide-elements",
+  "description": "Some high level elements to build the Photon IDE for Warp 10",
+  "main": "photon-elements.js",
+  "dependencies": {
+    "@granite-elements/ace-widget": "^2.0.3",
+    "@photon-elements/photon-iron": "^1.1.1",
+    "@polymer/lit-element": "^0.5.2",
+    "@polymer/polymer": "^3.0.0"
+  },
+  "devDependencies": {
+    "@polymer/iron-demo-helpers": "^3.0.0-pre.19",
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "wct-browser-legacy": "^1.0.0"
+  }
+}

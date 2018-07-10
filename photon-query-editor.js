@@ -4,9 +4,10 @@ import photonSharedStyles from './photon-shared-styles.js';
 
 import '@material/mwc-button/mwc-button.js';
 
-import PhotonWarpscriptExec from '@photon-elements/photon-iron/photon-warpscript-exec.js';
+import PhotonWarpscriptExec from '@photon-elements/photon-tools/photon-warpscript-exec.js';
 
 import '@granite-elements/ace-widget/ace-widget.js';
+import '@granite-elements/granite-alert/granite-alert.js';
 
 import './photon-ace-mode-warpscript.js';
 
@@ -41,7 +42,7 @@ class PhotonQueryEditor extends LitElement {
       </div>
       ${
         this.response ?
-        this._renderResponseMetadata(this.response)
+        this._renderResponse(this.response)
         : ''}
     `;
   }
@@ -141,13 +142,11 @@ class PhotonQueryEditor extends LitElement {
     if (this.debug) {
       console.log('[photon-query-editor] _handleError', error);
     }
-    if (!error.errorLine || !error.errorMsg) {
-      this.errorMsg = error;
-    } else {
-      this.errorMsg = 'ERROR line #' + error.errorLine + ': ' + error.errorMsg;
-    }
+
+    this.response = error;
+
     if (this.debug) {
-      console.debug('[photon-query-editor] _handleError', {error: error, errorMsg: this.errorMsg});
+      console.debug('[photon-query-editor] _handleError', this.response);
     }
   }
 
@@ -168,16 +167,32 @@ class PhotonQueryEditor extends LitElement {
   // Renderers
   // ***************************************************************************
 
+  _renderResponse() {
+    return html`
+      ${this._renderResponseMetadata()}
+      ${this._renderError()}
+    `;
+  }
+
   _renderResponseMetadata() {
     return html`
       <div class="row flex-end">
           Your last script execution took ${this._formatElapsedTime(this.response.options.elapsed)} serverside, 
-          fetched ${this.response.options.fetched}} datapoints and performed 
+          fetched ${this.response.options.fetched} datapoints and performed 
           ${this.response.options.operations} WarpScript operations.
       </div>
     `;
   }
 
+  _renderError() {
+    if (this.response.errorLine || this.response.errorMsg) {
+      return html `
+        <granite-alert level="danger">        
+          ERROR ${this.response.errorLine ? `line #${this.response.errorLine}` : ''} ${this.response.errorMsg}
+        </granite-alert>
+      `;
+    }
+  }
   _renderSlot() {
     return this.innerHTML || this.warpscript || '';
   }

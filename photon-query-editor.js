@@ -12,6 +12,8 @@ import '@granite-elements/granite-alert/granite-alert.js';
 import './photon-ace-mode-warpscript.js';
 
 
+import 'inspector-component/dist/inspector-component.js';
+
 /**
  * @customElement
  */
@@ -170,6 +172,7 @@ class PhotonQueryEditor extends LitElement {
   _renderResponse() {
     return html`
       ${this._renderResponseMetadata()}
+      ${this._renderResponseData()}
       ${this._renderError()}
     `;
   }
@@ -184,6 +187,18 @@ class PhotonQueryEditor extends LitElement {
     `;
   }
 
+  _renderResponseData() {
+    if (!this.response.errorLine && !this.response.errorMsg) {
+      return html`
+
+      <div class="row">
+        <div class="response-panel">
+          <inspector-component theme="chromeDark" data="${JSON.stringify(this.response.stack)}"></inspector-component>    
+        </div>
+      </div>
+      `;
+    }
+  }
   _renderError() {
     if (this.response.errorLine || this.response.errorMsg) {
       return html `
@@ -280,6 +295,20 @@ class PhotonQueryEditor extends LitElement {
         color: var(--primary-color);
         margin-right: 0.5em;
         cursor: pointer;
+      }
+
+      .response-panel {
+        width: 100%;
+        margin-top: 1.5rem;
+        min-height: 1.5rem;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        /* background-color: #002240;  */
+        background-color: #ffeeaa; 
+        border: 1px solid #e3e3e3;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05)
       }
     </style>
     `;

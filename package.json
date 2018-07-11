@@ -10,7 +10,8 @@
     "@photon-elements/photon-iron": "^1.3.0",
     "@photon-elements/photon-tools": "^1.5.2",
     "@polymer/lit-element": "^0.5.2",
-    "@polymer/polymer": "^3.0.0"
+    "@polymer/polymer": "^3.0.0",
+    "inspector-component": "git://github.com/LostInBrittany/inspector-component.git#listen-to-changes"
   },
   "devDependencies": {
     "@polymer/iron-demo-helpers": "^3.0.0-pre.19",

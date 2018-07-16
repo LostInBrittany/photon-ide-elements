@@ -11,8 +11,7 @@ import '@granite-elements/granite-alert/granite-alert.js';
 
 import './photon-ace-mode-warpscript.js';
 
-
-import 'inspector-component/dist/inspector-component.js';
+import './photon-response-inspector.js';
 
 /**
  * @customElement
@@ -192,9 +191,7 @@ class PhotonQueryEditor extends LitElement {
       return html`
 
       <div class="row">
-        <div class="response-panel">
-          <inspector-component theme="chromeDark" data="${JSON.stringify(this.response.stack)}"></inspector-component>    
-        </div>
+        <photon-response-inspector stack=${this.response.stack}></photon-response-inspector>    
       </div>
       `;
     }
@@ -297,18 +294,8 @@ class PhotonQueryEditor extends LitElement {
         cursor: pointer;
       }
 
-      .response-panel {
+      photon-response-inspector {
         width: 100%;
-        margin-top: 1.5rem;
-        min-height: 1.5rem;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        /* background-color: #002240;  */
-        background-color: #ffeeaa; 
-        border: 1px solid #e3e3e3;
-        border-radius: 4px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05)
       }
     </style>
     `;

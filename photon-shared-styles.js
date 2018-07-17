@@ -25,6 +25,8 @@ const photonSharedStyles = html`
     --mdc-theme-on-primary: #ffcc00;
     --app-primary-contrast-2: #ff3675;
     --app-primary-contrast-3: #86eb4e;
+    --app-primary-contrast-4: #eeeeee;
+    --app-primary-contrast-muted: #dbbe48;
   }
   .row {
     margin-top: 8px;

@@ -4,6 +4,8 @@ import { html, LitElement } from '@polymer/lit-element';
 import '@granite-elements/granite-inspector/object-inspector/granite-inspector-object-name';
 import '@granite-elements/granite-inspector/object-inspector/granite-inspector-object-value';
 
+import './photon-timeseries-renderer';
+
 import timeseriesTools from '@photon-elements/photon-tools/photon-timeseries-tools';
 
 /**
@@ -26,15 +28,16 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
     return this;
   }
 
-  _render({ data }) {
+  _render({ data, path }) {
     return html`
-      ${this.markup(data)}
+      ${this.markup(data, path)}
     `;
   }
 
   static get properties() {
     return {
       data: Object,
+      path: String,
       maxProperties: Number,
     };
   }
@@ -60,10 +63,8 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
             ${html`${
               this.data.map((element, i) => {
                 if (timeseriesTools.isTimeseries(element)) {
-                  return html`
-                    <span class='objectValueObject'><span class="serializedTimeseries">
-                      ${timeseriesTools.serializeTimeseriesMetadata(element, 5)}
-                    </span>
+                  return html`                  
+                    <photon-timeseries-renderer ts=${element} path='${this.path}.${i}'></photon-timeseries-renderer>                    
                     ${i<this.data.length-1 ? html`<span>,&nbsp;</span>` : ``}`;
                 } else {
                   return html`
@@ -79,10 +80,8 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
     } else if (typeof this.data === 'string') {
       return html`<granite-inspector-object-value data='${this.data}' ></granite-inspector-object-value>`;
     } else if (timeseriesTools.isTimeseries(this.data)) {
-      return html`
-        <span class='objectValueObject'><span class="serializedTimeseries">
-          ${timeseriesTools.serializeTimeseriesMetadata(this.data, 5)}
-        </span>`;
+      return html`        
+        <photon-timeseries-renderer ts=${this.data} path=${this.path}></photon-timeseries-renderer> `;
     } else {
       let propertyNodes = [];
       for (let propertyName in this.data) {
@@ -97,9 +96,9 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
             propertyNodes.push(html`
             <span>
               <granite-inspector-object-name name=${propertyName}></granite-inspector-object-name>:&nbsp;
-              <span class='objectValueObject'><span class="serializedTimeseries">
-                ${timeseriesTools.serializeTimeseriesMetadata(propertyValue, 5)}
-              </span>
+              <photon-timeseries-renderer 
+                  ts=${propertyValue} 
+                  path='${this.path}.${propertyName}'></photon-timeseries-renderer>
               ${ellipsis}
             </span>`);
           } else {

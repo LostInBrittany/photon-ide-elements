@@ -19,9 +19,9 @@ const photonTheme = {
   OBJECT_NAME_COLOR: 'var(--app-primary-contrast-2)',
   OBJECT_VALUE_NULL_COLOR: 'rgb(127, 127, 127)',
   OBJECT_VALUE_UNDEFINED_COLOR: 'rgb(127, 127, 127)',
-  OBJECT_VALUE_REGEXP_COLOR: 'var(--app-primary-contrast)',
-  OBJECT_VALUE_STRING_COLOR: 'var(--app-primary-contrast)',
-  OBJECT_VALUE_SYMBOL_COLOR: 'var(--app-primary-contrast)',
+  OBJECT_VALUE_REGEXP_COLOR: 'var(--app-primary-contrast-4)',
+  OBJECT_VALUE_STRING_COLOR: 'var(--app-primary-contrast-4)',
+  OBJECT_VALUE_SYMBOL_COLOR: 'var(--app-primary-contrast-4)',
   OBJECT_VALUE_NUMBER_COLOR: 'var(--app-primary-contrast-3)',
   OBJECT_VALUE_BOOLEAN_COLOR: 'var(--app-primary-contrast-3)',
   OBJECT_VALUE_FUNCTION_KEYWORD_COLOR: 'rgb(242, 85, 217)',
@@ -64,7 +64,7 @@ class PhotonResponseInspector extends LitElement {
     return this;
   }
 
-  _render({stack, nodeRenderer}) {
+  _render({ stack, nodeRenderer }) {
     let iterator = createIterator(true);
     return html`
       ${photonSharedStyles}
@@ -79,7 +79,9 @@ class PhotonResponseInspector extends LitElement {
             <div class="line">
               <div class="line-number">${index}:</div>
               <div class="line-content-container">
-                <div class="line-content">
+                <div 
+                    class="line-content" 
+                    on-plot-ts='${(evt) => this._onPlotTs(evt.detail, index)}'>
                   <granite-inspector-tree-view
                       data=${line}
                       expandLevel=0
@@ -91,7 +93,7 @@ class PhotonResponseInspector extends LitElement {
               </div>
             </div>
           `;
-         }) : ''}      
+        }) : ''}      
     </div>
       
     `;
@@ -101,6 +103,7 @@ class PhotonResponseInspector extends LitElement {
     super();
     this.styles = createStyles(photonTheme);
     this.nodeRenderer = defaultNodeRenderer;
+    this.plottedTs = {};
   }
 
   connectedCallback() {
@@ -114,6 +117,13 @@ class PhotonResponseInspector extends LitElement {
       stack: Array,
       nodeRenderer: Function,
     };
+  }
+
+  _onPlotTs(ts, index) {
+    if (!this.plottedTs[index]) {
+      this.plottedTs[index] = [];
+    }
+    
   }
 
   _renderElementStyles() {

@@ -12,6 +12,7 @@ import '@granite-elements/granite-alert/granite-alert';
 import './photon-ace-mode-warpscript';
 
 import './photon-response-inspector/photon-response-inspector';
+import './photon-response-plot/photon-response-plot';
 
 /**
  * @customElement
@@ -192,6 +193,9 @@ class PhotonQueryEditor extends LitElement {
 
       <div class="row">
         <photon-response-inspector stack=${this.response.stack}></photon-response-inspector>    
+      </div>
+      <div class-"row">
+        <photon-response-plot tsToPlot=${[]}></photon-response-plot>
       </div>
       `;
     }

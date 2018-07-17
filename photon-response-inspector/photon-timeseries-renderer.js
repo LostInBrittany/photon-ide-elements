@@ -17,7 +17,6 @@ class PhotonTimeseriesRenderer extends LitElement {
     if (!ts) {
       return;
     }
-    console.log('ts-renderer', path)
     return html`
       <style>
         :host {

@@ -3,7 +3,6 @@ import './photon-response-inspector-object-root-label';
 import './photon-response-inspector-object-label';
 
 const defaultNodeRenderer = ({ depth, name, data, isNonEnumerable, path }) => {
-  console.log('renderer', path)
    return html`
       ${depth === 0 ?
         html`

@@ -15,7 +15,6 @@ class PhotonResponseInspectorObjectRootLabel extends LitElement {
   }
 
   _render({name, data, path}) {
-    console.log('root-label', path)
     if (typeof name === 'string') {
       return html`
         <span>

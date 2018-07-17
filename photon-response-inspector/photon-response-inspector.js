@@ -119,11 +119,17 @@ class PhotonResponseInspector extends LitElement {
     };
   }
 
-  _onPlotTs(ts, index) {
+  _onPlotTs(detail, index) {
     if (!this.plottedTs[index]) {
       this.plottedTs[index] = [];
     }
-    
+    if (this.plottedTs[index].indexOf(detail.path) < 0) {
+      this.plottedTs[index].push(detail.path);
+    } else {
+      this.plottedTs[index].splice(this.plottedTs[index].indexOf(detail.path), 1);
+    }
+    this.dispatchEvent(new CustomEvent('plotted-changed', { detail: this.plottedTs }));
+    console.log('[photon-response-inspector] _onPlotTs', this.plottedTs);
   }
 
   _renderElementStyles() {

@@ -17,8 +17,6 @@ class PhotonResponseInspectorObjectLabel extends LitElement {
   }
 
   _render({name, data, path, isNonEnumerable}) {
-    console.log('label', path)
-
     return html`
       <granite-inspector-object-name 
           name=${name} 

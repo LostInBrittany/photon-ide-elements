@@ -18,7 +18,7 @@ import './photon-response-plot/photon-response-plot';
  * @customElement
  */
 class PhotonQueryEditor extends LitElement {
-  _render({warpscript, response, debug}) {
+  _render({warpscript, response, debug, _plottedPaths}) {
     return html`
       ${photonSharedStyles}
       ${this._renderElementStyles()}
@@ -33,8 +33,8 @@ class PhotonQueryEditor extends LitElement {
             placeholder="Type your WarpScript here..."
             on-editor-content="${(evt) => this.editorChangeAction(evt)}"
             initial-focus
-            value="${this.warpscript}"
-            debug="${this.debug}"> 
+            value="${warpscript}"
+            debug="${debug}"> 
         </ace-widget>   
       </div>
       <div class='row flex-end'>
@@ -44,7 +44,7 @@ class PhotonQueryEditor extends LitElement {
       </div>
       ${
         this.response ?
-        this._renderResponse(this.response)
+        this._renderResponse(response, _plottedPaths)
         : ''}
     `;
   }
@@ -96,6 +96,10 @@ class PhotonQueryEditor extends LitElement {
       elapsed: Number,
       response: Object,
       debug: Boolean,
+      /**
+       * The paths of the timeseries to plot
+       */
+      _plottedPaths: Array,
     };
   }
 
@@ -192,10 +196,16 @@ class PhotonQueryEditor extends LitElement {
       return html`
 
       <div class="row">
-        <photon-response-inspector stack=${this.response.stack}></photon-response-inspector>    
+        <photon-response-inspector 
+            stack=${this.response.stack}
+            on-plotted-changed='${(evt) => {
+              this._plottedPaths = { ...evt.detail };
+            }}'></photon-response-inspector>    
       </div>
       <div class-"row">
-        <photon-response-plot tsToPlot=${[]}></photon-response-plot>
+        <photon-response-plot 
+            stack=${this.response.stack}
+            plottedPaths=${this._plottedPaths}></photon-response-plot>
       </div>
       `;
     }

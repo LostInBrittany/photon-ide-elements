@@ -6,15 +6,13 @@ import '@granite-elements/granite-inspector/tree-view/granite-inspector-tree-vie
 import '@granite-elements/granite-inspector/object-inspector/granite-inspector-object-label';
 import '@granite-elements/granite-inspector/object-inspector/granite-inspector-object-root-label';
 
-import timeseriesTools from '@photon-elements/photon-tools/photon-timeseries-tools';
-
 import photonSharedStyles from './photon-shared-styles.js';
 
 import defaultNodeRenderer from '../photon-ide-elements/photon-response-inspector/photon-node-renderer';
 
 const photonTheme = {
   BASE_FONT_FAMILY: 'monospace',
-  BASE_FONT_SIZE: '1rem',
+  BASE_FONT_SIZE: '14px',
   BASE_LINE_HEIGHT: '18px',
 
   BASE_BACKGROUND_COLOR: 'var(--app-primary-color)',
@@ -43,7 +41,7 @@ const photonTheme = {
   ARROW_FONT_SIZE: '12px',
 
   TREENODE_FONT_FAMILY: 'monospace',
-  TREENODE_FONT_SIZE: '1rem',
+  TREENODE_FONT_SIZE: '14px',
   TREENODE_LINE_HEIGHT: '1.2rem',
   TREENODE_PADDING_LEFT: '12px',
 
@@ -86,7 +84,7 @@ class PhotonResponseInspector extends LitElement {
                 <div class="line-content">
                   <granite-inspector-tree-view
                       data=${line}
-                      expandLevel=1
+                      expandLevel=0
                       expandPath=''
                       sortObjectKeys='true'
                       nodeRenderer=${nodeRenderer}
@@ -138,7 +136,7 @@ class PhotonResponseInspector extends LitElement {
 
         .line {
           width: 100%;
-          font-size: 1rem;
+          font-size: 14px;
           font-family: monospace;
           display: flex;
           flex-wrap: nowrap;
@@ -160,6 +158,26 @@ class PhotonResponseInspector extends LitElement {
           margin-left: 1rem;
           color: white;
           word-wrap: break-word;
+        }
+
+        .serializedTimeseries {
+          color: var(--app-primary-contrast);
+        }
+
+        photon-response-inspector-object-preview,
+        photon-response-inspector-object-root-label,
+        photon-response-inspector-object-label {
+          font-size: 0px;
+        }
+        photon-response-inspector-object-preview span,
+        photon-response-inspector-object-root-label span,
+        photon-response-inspector-object-label span {
+          font-size: 14px;
+        }
+
+        photon-response-inspector-object-preview .objectValueObject {
+          font-size: 0px;
+          font-style: italic;
         }
 
       </style>

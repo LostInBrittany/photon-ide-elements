@@ -1,8 +1,10 @@
 import { html, LitElement } from '@polymer/lit-element';
 
 
-import '@granite-elements/granite-inspector/granite-inspector-object-name';
-import '@granite-elements/granite-inspector/granite-inspector-object-value';
+import '@granite-elements/granite-inspector/object-inspector/granite-inspector-object-name';
+import '@granite-elements/granite-inspector/object-inspector/granite-inspector-object-value';
+
+import timeseriesTools from '@photon-elements/photon-tools/photon-timeseries-tools';
 
 /**
  * A view for object property names.
@@ -53,21 +55,34 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
 
     if (this.data instanceof Array) {
       return html`
-        <div>
-          (${this.data.length}) [&nbsp;
+        <span class='objectValueObject'>
+          <span>(${this.data.length}) [</span>
             ${html`${
               this.data.map((element, i) => {
-                return html`
-                  <granite-inspector-object-value data=${element}></granite-inspector-object-value> 
-                  ${i<this.data.length-1 ? html`,&nbsp;` : ``}
-                `;
+                if (timeseriesTools.isTimeseries(element)) {
+                  return html`
+                    <span class='objectValueObject'><span class="serializedTimeseries">
+                      ${timeseriesTools.serializeTimeseriesMetadata(element, 5)}
+                    </span>
+                    ${i<this.data.length-1 ? html`<span>,&nbsp;</span>` : ``}`;
+                } else {
+                  return html`
+                    <granite-inspector-object-value data=${element}></granite-inspector-object-value> 
+                    ${i<this.data.length-1 ? html`<span>,&nbsp;</span>` : ``}
+                  `;
+                }
               })
             }`}
-          &nbsp;]
-        </div>
+          <span>]</span>
+        </span>
       `;
     } else if (typeof this.data === 'string') {
       return html`<granite-inspector-object-value data='${this.data}' ></granite-inspector-object-value>`;
+    } else if (timeseriesTools.isTimeseries(this.data)) {
+      return html`
+        <span class='objectValueObject'><span class="serializedTimeseries">
+          ${timeseriesTools.serializeTimeseriesMetadata(this.data, 5)}
+        </span>`;
     } else {
       let propertyNodes = [];
       for (let propertyName in this.data) {
@@ -76,14 +91,26 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
           let ellipsis = '';
           if (propertyNodes.length === this.maxProperties - 1 &&
               Object.keys(this.data).length > this.maxProperties) {
-            ellipsis = html`<div>…</div>`;
+            ellipsis = html`<span>…</span>`;
           }
-          propertyNodes.push(html`
-          <div>
-            <granite-inspector-object-name name=${propertyName}></granite-inspector-object-name>:&nbsp;
-            <granite-inspector-object-value data=${propertyValue}></granite-inspector-object-value>
-            ${ellipsis}
-          </div>`);
+          if (timeseriesTools.isTimeseries(propertyValue)) {
+            propertyNodes.push(html`
+            <span>
+              <granite-inspector-object-name name=${propertyName}></granite-inspector-object-name>:&nbsp;
+              <span class='objectValueObject'><span class="serializedTimeseries">
+                ${timeseriesTools.serializeTimeseriesMetadata(propertyValue, 5)}
+              </span>
+              ${ellipsis}
+            </span>`);
+          } else {
+            propertyNodes.push(html`
+            <span>
+              <granite-inspector-object-name name=${propertyName}></granite-inspector-object-name>
+              <span>:&nbsp;</span>
+              <granite-inspector-object-value data=${propertyValue}></granite-inspector-object-value>
+              ${ellipsis}
+            </span>`);
+          }
           if (ellipsis != '') break;
         }
       }
@@ -91,10 +118,11 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
         return html`${this.data.constructor.name} {}`;
       }
       return html`
-        <div>
-          ${this.data.constructor.name} 
-          {&nbsp;${propertyNodes.map((element, i) => html`${element}${i<propertyNodes.length-1 ? html`,&nbsp;` : ``}`)}&nbsp;} 
-        </div>
+        <span class='objectValueObject'>
+          <span>${this.data.constructor.name} {</span>
+          ${propertyNodes.map((element, i) => html`${element}${i<propertyNodes.length-1 ? html`<span>,&nbsp;</span>` : ``}`)}
+          <span>}</span> 
+        </span>
       `;
     }
   }

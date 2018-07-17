@@ -5,10 +5,10 @@ import '@granite-elements/granite-c3/granite-c3';
 
 class PhotonResponsePlot extends LitElement {
   _render({ stack, plottedPaths }) {
-    if (!stack || !plottedPaths) {
+    if (!stack || !plottedPaths ) {
       return ``;
     }
-    console.log('[photon-response-plot] - _render', this._dataFromPlottedTs(), stack, plottedPaths);
+    // console.log('[photon-response-plot] - _render', this._dataFromPlottedTs(), stack, plottedPaths);
     return html`
         ${photonSharedStyles} 
         ${this._renderC3()}

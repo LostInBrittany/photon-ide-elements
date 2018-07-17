@@ -142,6 +142,11 @@ class PhotonQueryEditor extends LitElement {
       console.log('[photon-query-editor] _handleResponse', response);
     }
     this.response = response;
+    if (this._plottedPaths) {
+      let plottedPaths = {};
+      Object.entries(this._plottedPaths).forEach((kv) => plottedPaths[kv[0]] = []);
+      this._plottedPaths= plottedPaths;
+    }
   }
 
   _handleError(error) {
@@ -314,6 +319,10 @@ class PhotonQueryEditor extends LitElement {
     </style>
     `;
   }
+
+
+
+
 }
 
 window.customElements.define('photon-query-editor', PhotonQueryEditor);

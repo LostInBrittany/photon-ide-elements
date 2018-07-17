@@ -1,17 +1,17 @@
 import { LitElement, html } from '@polymer/lit-element';
 
-import photonSharedStyles from './photon-shared-styles.js';
+import photonSharedStyles from './photon-shared-styles';
 
-import '@material/mwc-button/mwc-button.js';
+import '@material/mwc-button/mwc-button';
 
-import PhotonWarpscriptExec from '@photon-elements/photon-tools/photon-warpscript-exec.js';
+import PhotonWarpscriptExec from '@photon-elements/photon-tools/photon-warpscript-exec';
 
-import '@granite-elements/ace-widget/ace-widget.js';
-import '@granite-elements/granite-alert/granite-alert.js';
+import '@granite-elements/ace-widget/ace-widget';
+import '@granite-elements/granite-alert/granite-alert';
 
-import './photon-ace-mode-warpscript.js';
+import './photon-ace-mode-warpscript';
 
-import './photon-response-inspector.js';
+import './photon-response-inspector/photon-response-inspector';
 
 /**
  * @customElement

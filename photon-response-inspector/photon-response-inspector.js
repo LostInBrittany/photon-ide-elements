@@ -3,12 +3,10 @@ import { LitElement, html } from '@polymer/lit-element';
 import { createStyles } from '@granite-elements/granite-inspector/styles/createStyles';
 import createIterator from '@granite-elements/granite-inspector/tools/createIterator';
 import '@granite-elements/granite-inspector/tree-view/granite-inspector-tree-view';
-import '@granite-elements/granite-inspector/object-inspector/granite-inspector-object-label';
-import '@granite-elements/granite-inspector/object-inspector/granite-inspector-object-root-label';
 
-import photonSharedStyles from './photon-shared-styles.js';
+import photonSharedStyles from '../photon-shared-styles.js';
 
-import defaultNodeRenderer from '../photon-ide-elements/photon-response-inspector/photon-node-renderer';
+import defaultNodeRenderer from './photon-node-renderer';
 
 const photonTheme = {
   BASE_FONT_FAMILY: 'monospace',

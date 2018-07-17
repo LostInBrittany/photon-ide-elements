@@ -32,26 +32,28 @@
         <template>
           <photon-query-editor debug>
 NEWGTS 'toto' RENAME
-0 NaN NaN NaN 42 ADDVALUE
+NOW 0 - NaN NaN NaN 25 ADDVALUE
+NOW 1 h - NaN NaN NaN 24 ADDVALUE
 
 NEWGTS 'titi' RENAME { 'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'j' 'k' 'l' 'm' } RELABEL
-0 NaN NaN NaN 42 ADDVALUE
-10 NaN NaN NaN 42 ADDVALUE
+NOW 0 - NaN NaN NaN 42 ADDVALUE
+NOW 1 h - NaN NaN NaN 24 ADDVALUE
 
 [
     NEWGTS 'toto' RENAME
-    0 NaN NaN NaN 42 ADDVALUE
+    NOW 0 - NaN NaN NaN 52 ADDVALUE
+    NOW 1 h - NaN NaN NaN 14 ADDVALUE
     
     NEWGTS 'titi' RENAME { 'a' 'b' } RELABEL
-    0 NaN NaN NaN 42 ADDVALUE
-    10 NaN NaN NaN 42 ADDVALUE
+    NOW 0 - NaN NaN NaN 25 ADDVALUE
+    NOW 1 h - NaN NaN NaN 41 ADDVALUE
 ]
 
 { 
     'a'
     NEWGTS 'titi' RENAME { 'a' 'b' } RELABEL
-    0 NaN NaN NaN 42 ADDVALUE
-    10 NaN NaN NaN 42 ADDVALUE
+    NOW 0 - NaN NaN NaN 2 ADDVALUE
+    NOW 1 h - NaN NaN NaN 4 ADDVALUE
 }
 NOW
 { 'a' 'b' }

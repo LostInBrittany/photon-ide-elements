@@ -14,14 +14,23 @@ import './photon-ace-mode-warpscript';
 import './photon-response-inspector/photon-response-inspector';
 import './photon-response-plot/photon-response-plot';
 
+import './photon-backend-chooser/photon-backend-info';
+import './photon-backend-chooser';
+
+
 /**
  * @customElement
  */
 class PhotonQueryEditor extends LitElement {
-  _render({warpscript, response, debug, _plottedPaths}) {
+  _render({warpscript, backend, response, debug, _plottedPaths}) {
+    console.log('rendering backend', backend)
     return html`
       ${photonSharedStyles}
       ${this._renderElementStyles()}
+
+      <div class="row flex-end ">
+        <photon-backend-info backend='${backend}'></photon-backend-info>
+      </div>
 
       <div class='row'>
         <ace-widget
@@ -103,8 +112,23 @@ class PhotonQueryEditor extends LitElement {
     };
   }
 
+  constructor() {
+    super();
+    this.backend = {
+      id: 'default',
+      label: 'Default backend',
+      // url: 'http://127.0.0.1:8080/api/v0',
+      url: 'https://warp10.bhs1.metrics.ovh.net/api/v0',
+      execEndpoint: '/exec',
+      findEndpoint: '/find',
+      updateEndpoint: '/update',
+      deleteEndpoint: '/delete',
+      headerName: 'X-Warp10-Token'
+    }
+  }
+
   connectedCallback() {
-    super.connectedCallback();
+    super.connectedCallback();    
     this.warpscript = this.innerHTML || this.warpscript || '';
     this.$ = {
       editor: this.shadowRoot.querySelector('#editor'),
@@ -132,7 +156,7 @@ class PhotonQueryEditor extends LitElement {
       console.debug('[photon-query-editor] Execute', this.warpscript);
     }
     PhotonWarpscriptExec
-      .exec('https://warp10.bhs1.metrics.ovh.net/api/v0/exec', this.warpscript)
+      .exec(`${this.backend.url}${this.backend.execEndpoint}`, this.warpscript)
       .then((response) => this._handleResponse(response))
       .catch((error) => this._handleError(error));
   }
@@ -312,6 +336,7 @@ class PhotonQueryEditor extends LitElement {
         margin-right: 0.5em;
         cursor: pointer;
       }
+
 
       photon-response-inspector {
         width: 100%;

@@ -29,12 +29,23 @@ const photonSharedStyles = html`
     --app-primary-contrast-muted: #dbbe48;
   }
   .row {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 16px;
+    margin-bottom: 16px;
     display: flex;
     flex-flow: row nowrap;
   }
+  .column {
+    display: flex;
+    flex-flow: column nowrap;
+  }
 
+  .flex {
+    display: flex;
+    flex-flow: row nowrap;
+  }
+  .align-items-center {
+    align-items: center;
+  }
   .wrap {
     flex-wrap: wrap;
   }

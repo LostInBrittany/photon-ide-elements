@@ -40,6 +40,12 @@ class PhotonQueryEditor extends LitElement {
         <photon-backend-info 
             backend='${backend}' 
             conf='${conf}' 
+            on-backend-change='${(evt) => {
+              if (this.debug) {
+                console.log('[photon-query-editor] on-backend-change', evt.detail);
+              }
+              this.backend = evt.detail;
+            }}'
             debug="${debug}"></photon-backend-info>
       </div>
 
@@ -137,8 +143,8 @@ class PhotonQueryEditor extends LitElement {
   }
 
   initBackend() {
-    if (sessionStorage.getItem('warp10-backend')) {
-      this.backend = sessionStorage.getItem('warp10-backend');
+    if (sessionStorage.getItem('warp10-backend-conf')) {
+      this.backend = JSON.parse(sessionStorage.getItem('warp10-backend-conf'));
       return;
     } 
     this.backend = this._defaultBackend;
@@ -215,8 +221,8 @@ class PhotonQueryEditor extends LitElement {
     if (this.debug) {
       console.debug('[photon-query-editor] _confLoaded', this.conf);
     }
-    if (sessionStorage.getItem('warp10-backend')) {
-      this.backend = sessionStorage.getItem('warp10-backend');
+    if (sessionStorage.getItem('warp10-backend-conf')) {
+      this.backend = JSON.parse(sessionStorage.getItem('warp10-backend-conf'));
       return;
     } 
     if (conf.backends && conf.backends.length > 0) {

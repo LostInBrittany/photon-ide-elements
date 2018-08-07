@@ -2,10 +2,12 @@ import { LitElement, html } from '@polymer/lit-element';
 import photonSharedStyles from '../photon-shared-styles.js';
 
 import '@material/mwc-radio';
+import '@material/mwc-icon';
+import '../photon-textfield/photon-textfield';
 
 class PhotonBackendPicker extends LitElement {
-  _render({backend, conf, customBackend, _showCustomBackend, _savedBackends }) {
-    console.log('[photon-backend-picker] rendering', {backend, customBackend, _showCustomBackend, _savedBackends });
+  _render({backend, conf, customBackend, _customBackendChoosen, _savedBackends }) {
+    console.log('[photon-backend-picker] rendering', {backend, customBackend, _savedBackends });
     if (!backend || !customBackend) {
       return;
     }
@@ -59,22 +61,36 @@ class PhotonBackendPicker extends LitElement {
             id$='custom_backend'
             value='custom_backend'
             name='backendRadioGroup' 
-            on-click='${()=>this._onCustomBackendChosen()}'></mwc-radio>              
-        <div class='backendRadioGroupItem'>
-          <div class="backend_label">Custom backend</div>
-          <div class="backend_url">${customBackend.url}${customBackend.execEndpoint}</div>
-        </div>
+            on-click='${()=>this._onCustomBackendChosen()}'></mwc-radio>       
+        <photon-textfield 
+            class="custom-backend-url" 
+            label="Backend URL" 
+            on-change="${(evt) => {
+              let _backend = { ...customBackend, url: evt.detail, id: '' };
+              this.customBackend = _backend;
+              this.backend = _backend;
+              if (this.debug) {
+                console.log('[photon-backend-picker] URL changed', this.backend, evt.detail);
+              }
+            }}"
+            value="${customBackend.url}"></photon-textfield>
+        <photon-textfield 
+            class="custom-backend-execEndpoint" 
+            label="Exec endpoint" 
+            on-change="${(evt) => {
+              let _backend = { ...customBackend, execEndpoint: evt.detail, id: '' };
+              this.customBackend = _backend;
+              this.backend= _backend;
+              if (this.debug) {
+                console.log('[photon-backend-picker] Exec endpoint changed', this.backend, evt.detail);
+              }
+            }}"
+            value="${customBackend.execEndpoint}"></photon-textfield>
+        ${_customBackendChoosen ? html`
+          <mwc-icon 
+            class="saveBackendBtn"
+            on-click="${()=>this.saveBackend()}">save</mwc-icon>`:''}
       </div>
-    </div>
-    
-      ${_showCustomBackend ?
-        html`
-          <div class="customBackendEdit">
-            Let's edit
-          </div>
-        ` :
-        ``
-      }
     `;
   }
 
@@ -83,7 +99,7 @@ class PhotonBackendPicker extends LitElement {
       if (this.debug) {
         console.log('[photon-backend-picker] _didRender - backend changed', changedProps.backend);
       }
-      this._delayedFireEvent(new CustomEvent('backend-change', {detail: changedProps.backend}));
+      this._delayedFireEvent(new CustomEvent('backend-change', {detail: changedProps.backend, bubbles: true, composed: true}));
     }
   }
 
@@ -113,7 +129,7 @@ class PhotonBackendPicker extends LitElement {
        */
       debug: Boolean,
       customBackend: Object,
-      _showCustomBackend: Boolean,
+      _customBackendChoosen: Boolean,
       _savedBackends: Array,
     };
   }
@@ -123,9 +139,9 @@ class PhotonBackendPicker extends LitElement {
     this.configuredBackends = [];
     this.customBackend = {
       id: '',
-      label: 'Custom',
-      url: 'http://127.0.0.1:8080/api/v0',
-      execEndpoint: '/exec',
+      label: '',
+      url: '',
+      execEndpoint: '',
     };
     this._savedBackends = this._readBackendsFromLocalStorage();
     this.addEventListener('backend-change', async () => {
@@ -154,9 +170,7 @@ class PhotonBackendPicker extends LitElement {
   }
 
   async _delayedFireEvent(evt) {
-    console.log('[photon-backend-picker] _delayedFireEvent 1', evt);
     await this.renderComplete;
-    console.log('[photon-backend-picker] _delayedFireEvent 2', evt);
     this.dispatchEvent(evt);
   }
 
@@ -173,15 +187,39 @@ class PhotonBackendPicker extends LitElement {
 
   _isCustomBackend() {
     if (this.debug) {
-      console.log('[photon-backend-picker] _isCustomBackend', this.backend, this.configuredBackends);
+      console.log('[photon-backend-picker] _isCustomBackend', this.backend, this.configuredBackends, this._savedBackends);
     }
     if (!this.backend) {
       return false;
     }
     for (let index in this.configuredBackends) {
-      if (this.configuredBackends[index].id == this.backend.id) {
+      if (this._equalBackends(this.backend, this.configuredBackends[index])) {
+        if (this.debug) {
+          console.log('[photon-backend-picker] _isCustomBackend - false');
+        }
         return false;
       }
+    }
+    for (let index in this._savedBackends) {
+      if (this._equalBackends(this.backend, this._savedBackends[index])) {
+        if (this.debug) {
+          console.log('[photon-backend-picker] _isCustomBackend - false');
+        }
+        return false;
+      }
+    }
+    if (this.debug) {
+      console.log('[photon-backend-picker] _isCustomBackend - true');
+    }
+    return true;
+  }
+
+  _equalBackends(a,b) {
+    if (a.url != b.url) {
+      return false;
+    }
+    if (a.execEndpoint != b.execEndpoint) {
+      return false;
     }
     return true;
   }
@@ -197,11 +235,24 @@ class PhotonBackendPicker extends LitElement {
   }
 
   _onBackendChosen(backend) {
+    this._customBackendChoosen = false;
     this.backend = backend;
+    if (this.debug) {
+      console.log('[photon-backend-picker] _onBackendChosen', this.backend);
+    }
   }
   _onCustomBackendChosen() {
-    this._customBackend = this.backend;
-    this._showCustomBackend = true;
+    this._customBackendChoosen = true;
+    this.customBackend = this.backend;
+    if (this.debug) {
+      console.log('[photon-backend-picker] _onCustomBackendChosen', this.customBackend);
+    }
+  }
+
+  saveBackend() {
+    if (this.debug) {
+      console.log('[photon-backend-picker] saveBackend', this.customBackend);
+    }
   }
 
   _renderStyle() {
@@ -219,6 +270,12 @@ class PhotonBackendPicker extends LitElement {
           display: flex;
           flex-flow: column;
           padding-left: 32px;
+        }
+        .custom-backend-url {
+          --photon-textfield-width: 400px;
+        }
+        .custom-backend-execEndpoint {
+          --photon-textfield-width: 200px;
         }
       </style>
     `;

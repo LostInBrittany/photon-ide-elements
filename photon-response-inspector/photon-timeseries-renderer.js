@@ -21,7 +21,7 @@ class PhotonTimeseriesRenderer extends LitElement {
       <style>
         :host {
           --mdc-icon-size: 11px; 
-        }
+        }        
         mwc-icon {
           background-color: var(--app-primary-contrast-muted);
           color: var(--app-primary-color);
@@ -30,6 +30,7 @@ class PhotonTimeseriesRenderer extends LitElement {
           margin-bottom: 4px;
           cursor: pointer;
           font-weight: bolder;
+          --mdc-icon-size: 11px;
         }
       </style>
       <span class="serializedTimeseries">

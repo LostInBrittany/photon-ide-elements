@@ -1,3 +1,5 @@
+
+import '@granite-elements/ace-widget/ace-widget';
 ace.define ("ace/mode/warpscript_keywords", function(require, exports, module) {
     "use strict";
     

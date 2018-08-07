@@ -1,32 +1,59 @@
 import { LitElement, html } from '@polymer/lit-element';
-import photonSharedStyles from './photon-shared-styles.js';
+import photonSharedStyles from '../photon-shared-styles.js';
 
 import '@material/mwc-radio';
 
-class PhotonBackendChooser extends LitElement {
-  _render({backend, configuredBackends, customBackend, _showCustomBackend, _savedBackends }) {
-    console.log('rendering', {backend, configuredBackends, customBackend, _showCustomBackend, _savedBackends });
-    if (!backend || !configuredBackends || !customBackend) {
+class PhotonBackendPicker extends LitElement {
+  _render({backend, conf, customBackend, _showCustomBackend, _savedBackends }) {
+    console.log('[photon-backend-picker] rendering', {backend, customBackend, _showCustomBackend, _savedBackends });
+    if (!backend || !customBackend) {
       return;
     }
     return html`
       ${photonSharedStyles}
       ${this._renderStyle()}
 
-      ${[...configuredBackends, ..._savedBackends].map((item) => html`
-        <div class='flex align-items-center'>
-          <mwc-radio 
-              id$='backend_${item.id}'
-              value='backend_${item.id}'
-              name='backendRadioGroup' 
-              checked?='${item.id === backend.id}'
-              on-click='${()=>this._onBackendChosen(item)}'></mwc-radio>        
-          <div class='backendRadioGroupItem'>
-            <div class="backend_label">${item.label}</div>
-            <div class="backend_url">${item.url}${item.execEndpoint}</div>
-          </div>
-        </div>
-      `)}
+      ${ (_savedBackends && _savedBackends.length >0) ?
+        html`
+          <h3>Your backends</h3>
+          ${_savedBackends.map((item) => html`
+            <div class='flex align-items-center'>
+              <mwc-radio 
+                  id$='backend_${item.id}'
+                  value='backend_${item.id}'
+                  name='backendRadioGroup' 
+                  checked?='${item.id === backend.id}'
+                  on-click='${()=>this._onBackendChosen(item)}'></mwc-radio>        
+              <div class='backendRadioGroupItem'>
+                <div class="backend_label">${item.label}</div>
+                <div class="backend_url">${item.url}${item.execEndpoint}</div>
+              </div>
+            </div>
+          `)}
+        `:''
+      }
+
+      ${ (conf && conf.backends && conf.backends.length > 0) ?
+        html`
+          <h3>Default backends</h3>
+          ${conf.backends.map((item) => html`
+            <div class='flex align-items-center'>
+              <mwc-radio 
+                  id$='backend_${item.id}'
+                  value='backend_${item.id}'
+                  name='backendRadioGroup' 
+                  checked?='${item.id === backend.id}'
+                  on-click='${()=>this._onBackendChosen(item)}'></mwc-radio>        
+              <div class='backendRadioGroupItem'>
+                <div class="backend_label">${item.label}</div>
+                <div class="backend_url">${item.url}${item.execEndpoint}</div>
+              </div>
+            </div>
+          `)}
+        `:''
+      }
+
+      <h3>Custom backend</h3>
       <div class='flex align-items-center'>
         <mwc-radio 
             id$='custom_backend'
@@ -54,7 +81,7 @@ class PhotonBackendChooser extends LitElement {
   _didRender(props, changedProps, prevProps) {
     if (changedProps.backend !== undefined) {
       if (this.debug) {
-        console.log('[photon-backend-chooser] _didRender - backend changed', changedProps.backend);
+        console.log('[photon-backend-picker] _didRender - backend changed', changedProps.backend);
       }
       this._delayedFireEvent(new CustomEvent('backend-change', {detail: changedProps.backend}));
     }
@@ -80,7 +107,7 @@ class PhotonBackendChooser extends LitElement {
       /**
        * An array of pre-configured backends
        */
-      configuredBackends: Array,
+      conf: Object,
       /**
        * If true, it logs to the console
        */
@@ -103,7 +130,7 @@ class PhotonBackendChooser extends LitElement {
     this._savedBackends = this._readBackendsFromLocalStorage();
     this.addEventListener('backend-change', async () => {
       if (this.debug) {
-        console.log('[photon-backend-chooser] backend-change event listener', this.backend);
+        console.log('[photon-backend-picker] backend-change event listener', this.backend);
       }
       sessionStorage.setItem('warp10-backend-conf', JSON.stringify(this.backend));
       window.dispatchEvent(new StorageEvent('storage', {key: 'warp10-backend-conf'}));
@@ -127,9 +154,9 @@ class PhotonBackendChooser extends LitElement {
   }
 
   async _delayedFireEvent(evt) {
-    console.log('[photon-backend-chooser] _delayedFireEvent 1', evt);
+    console.log('[photon-backend-picker] _delayedFireEvent 1', evt);
     await this.renderComplete;
-    console.log('[photon-backend-chooser] _delayedFireEvent 2', evt);
+    console.log('[photon-backend-picker] _delayedFireEvent 2', evt);
     this.dispatchEvent(evt);
   }
 
@@ -146,7 +173,7 @@ class PhotonBackendChooser extends LitElement {
 
   _isCustomBackend() {
     if (this.debug) {
-      console.log('[photon-backend-chooser] _isCustomBackend', this.backend, this.configuredBackends);
+      console.log('[photon-backend-picker] _isCustomBackend', this.backend, this.configuredBackends);
     }
     if (!this.backend) {
       return false;
@@ -197,4 +224,4 @@ class PhotonBackendChooser extends LitElement {
     `;
   }
 }
-window.customElements.define('photon-backend-chooser', PhotonBackendChooser);
+window.customElements.define('photon-backend-picker', PhotonBackendPicker);

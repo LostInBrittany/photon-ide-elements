@@ -8,6 +8,7 @@ import PhotonWarpscriptExec from '@photon-elements/photon-tools/photon-warpscrip
 
 import '@granite-elements/ace-widget/ace-widget';
 import '@granite-elements/granite-alert/granite-alert';
+import '@granite-elements/granite-yaml/granite-yaml-remote-parser';
 
 import './photon-ace-mode-warpscript';
 
@@ -15,21 +16,31 @@ import './photon-response-inspector/photon-response-inspector';
 import './photon-response-plot/photon-response-plot';
 
 import './photon-backend-chooser/photon-backend-info';
-import './photon-backend-chooser';
 
 
 /**
  * @customElement
  */
 class PhotonQueryEditor extends LitElement {
-  _render({warpscript, backend, response, debug, _plottedPaths}) {
+  _render({warpscript, backend, conf, response, debug, _plottedPaths}) {
     console.log('rendering backend', backend)
     return html`
       ${photonSharedStyles}
       ${this._renderElementStyles()}
 
+
+      <granite-yaml-remote-parser 
+          id="conf-loader" 
+          url="${this.importPath()}photon-conf.yaml" 
+          on-yaml-parsed="${(evt) => this._confLoaded(evt.detail.obj) }}"
+          debug$="${debug}"
+          auto ></granite-yaml-remote-parser>
+
       <div class="row flex-end ">
-        <photon-backend-info backend='${backend}'></photon-backend-info>
+        <photon-backend-info 
+            backend='${backend}' 
+            conf='${conf}' 
+            debug="${debug}"></photon-backend-info>
       </div>
 
       <div class='row'>
@@ -58,7 +69,6 @@ class PhotonQueryEditor extends LitElement {
     `;
   }
 
-
   static get properties() {
     return {
       /**
@@ -82,20 +92,6 @@ class PhotonQueryEditor extends LitElement {
         */
       backend: Object,
       /**
-        * The default backend
-        *  {
-        *    "id": "default",
-        *    "label": "Default backend",
-        *    "url": "http://127.0.0.1:8080/api/v0",
-        *    "execEndpoint": "/exec",
-        *    "findEndpoint": "/find",
-        *    "updateEndpoint": "/update",
-        *    "deleteEndpoint": "/delete",
-        *    "headerName": "X-Warp10-Token"
-        *  }
-        */
-      defaultBackend: Object,
-      /**
        * The WarpScript stack received as response
        */
       stack: Array,
@@ -103,6 +99,10 @@ class PhotonQueryEditor extends LitElement {
        * Elapsed time for the call
        */
       elapsed: Number,
+      /**
+       * The parsed configuration file
+       */
+      conf: Object,
       response: Object,
       debug: Boolean,
       /**
@@ -114,27 +114,36 @@ class PhotonQueryEditor extends LitElement {
 
   constructor() {
     super();
-    this.backend = {
+    this._defaultBackend = {
       id: 'default',
       label: 'Default backend',
-      // url: 'http://127.0.0.1:8080/api/v0',
-      url: 'https://warp10.bhs1.metrics.ovh.net/api/v0',
+      url: 'http://127.0.0.1:8080/api/v0',
       execEndpoint: '/exec',
       findEndpoint: '/find',
       updateEndpoint: '/update',
       deleteEndpoint: '/delete',
-      headerName: 'X-Warp10-Token'
+      headerName: 'X-Warp10-Token',
     }
   }
 
   connectedCallback() {
-    super.connectedCallback();    
+    super.connectedCallback();
+    this.initBackend();
     this.warpscript = this.innerHTML || this.warpscript || '';
     this.$ = {
       editor: this.shadowRoot.querySelector('#editor'),
       warpscriptcaller: this.shadowRoot.querySelector('#warpscriptcaller'),
     };
   }
+
+  initBackend() {
+    if (sessionStorage.getItem('warp10-backend')) {
+      this.backend = sessionStorage.getItem('warp10-backend');
+      return;
+    } 
+    this.backend = this._defaultBackend;
+  }
+
 
 
   // ***************************************************************************
@@ -196,6 +205,31 @@ class PhotonQueryEditor extends LitElement {
       return `${(elapsed / 1000000).toFixed(3)} ms`;
     }
     return `${(this.elapsed / 1000000000).toFixed(3)} s`;
+  }
+
+  _confLoaded(conf) {  
+    if (!conf) {
+      return;
+    }
+    this.conf = conf;
+    if (this.debug) {
+      console.debug('[photon-query-editor] _confLoaded', this.conf);
+    }
+    if (sessionStorage.getItem('warp10-backend')) {
+      this.backend = sessionStorage.getItem('warp10-backend');
+      return;
+    } 
+    if (conf.backends && conf.backends.length > 0) {
+      let defaultConfBackend = 
+        conf.backends.filter((backend) => backend.default);
+      if (defaultConfBackend.length > 0) {
+        this.backend = defaultConfBackend[0];
+        return;
+      }
+      this.backend = conf.backends[0];
+      return;
+    }
+    this.backend = this._defaultBackend;
   }
 
   // ***************************************************************************
@@ -345,7 +379,13 @@ class PhotonQueryEditor extends LitElement {
     `;
   }
 
+  pathFromUrl(url) {
+      return url.substring(0, url.lastIndexOf('/') + 1);
+  }
 
+  importPath() {
+      return `${this.pathFromUrl(import.meta.url)}`;
+  }
 
 
 }

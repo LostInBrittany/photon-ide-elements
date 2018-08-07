@@ -99,7 +99,10 @@ class PhotonBackendPicker extends LitElement {
       if (this.debug) {
         console.log('[photon-backend-picker] _didRender - backend changed', changedProps.backend);
       }
-      this._delayedFireEvent(new CustomEvent('backend-change', {detail: changedProps.backend, bubbles: true, composed: true}));
+      this._delayedFireEvent(new CustomEvent(
+          'backend-change',
+          {detail: changedProps.backend, bubbles: true, composed: true})
+      );
     }
   }
 
@@ -187,7 +190,8 @@ class PhotonBackendPicker extends LitElement {
 
   _isCustomBackend() {
     if (this.debug) {
-      console.log('[photon-backend-picker] _isCustomBackend', this.backend, this.configuredBackends, this._savedBackends);
+      console.log('[photon-backend-picker] _isCustomBackend',
+          this.backend, this.configuredBackends, this._savedBackends);
     }
     if (!this.backend) {
       return false;
@@ -214,7 +218,7 @@ class PhotonBackendPicker extends LitElement {
     return true;
   }
 
-  _equalBackends(a,b) {
+  _equalBackends(a, b) {
     if (a.url != b.url) {
       return false;
     }

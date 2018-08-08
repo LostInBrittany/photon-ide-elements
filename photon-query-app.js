@@ -1,6 +1,6 @@
 import { LitElement, html } from '@polymer/lit-element';
 
-import './photon-query-editor';
+import './photon-query-editor.js';
 
 
 /**

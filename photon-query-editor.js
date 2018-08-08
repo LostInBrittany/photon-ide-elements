@@ -22,7 +22,7 @@ import './photon-backend-chooser/photon-backend-info';
  * @customElement
  */
 class PhotonQueryEditor extends LitElement {
-  _render({warpscript, backend, conf, response, debug, _plottedPaths}) {
+  _render({warpscript, backend, conf, confPath, response, debug, _plottedPaths}) {
     console.log('rendering backend', backend)
     return html`
       ${photonSharedStyles}
@@ -31,7 +31,7 @@ class PhotonQueryEditor extends LitElement {
 
       <granite-yaml-remote-parser 
           id="conf-loader" 
-          url="${this.importPath()}photon-conf.yaml" 
+          url="${confPath}" 
           on-yaml-parsed="${(evt) => this._confLoaded(evt.detail.obj) }}"
           debug$="${debug}"
           auto ></granite-yaml-remote-parser>
@@ -110,6 +110,7 @@ class PhotonQueryEditor extends LitElement {
        */
       conf: Object,
       response: Object,
+      confPath: String,
       debug: Boolean,
       /**
        * The paths of the timeseries to plot
@@ -130,6 +131,7 @@ class PhotonQueryEditor extends LitElement {
       deleteEndpoint: '/delete',
       headerName: 'X-Warp10-Token',
     }
+    this.confPath = `${this.importPath()}photon-conf.yaml`;
   }
 
   connectedCallback() {

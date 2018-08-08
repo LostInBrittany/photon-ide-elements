@@ -51,7 +51,7 @@ class PhotonBackendInfo extends LitElement {
         </div> 
         <mwc-icon 
             class="editBackendBtn"
-            on-click="${()=>this.editBackend()}">edit</mwc-icon>
+            on-click="${()=>this.editBackend()}">settings</mwc-icon>
       </div>
     `;
   }

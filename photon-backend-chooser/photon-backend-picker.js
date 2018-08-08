@@ -18,18 +18,21 @@ class PhotonBackendPicker extends LitElement {
       ${ (_savedBackends && _savedBackends.length >0) ?
         html`
           <h3>Your backends</h3>
-          ${_savedBackends.map((item) => html`
+          ${_savedBackends.map((item, index) => html`
             <div class='flex align-items-center'>
               <mwc-radio 
                   id$='backend_${item.id}'
                   value='backend_${item.id}'
                   name='backendRadioGroup' 
-                  checked?='${item.id === backend.id}'
+                  checked?='${this._equalBackends(backend, item)}'
                   on-click='${()=>this._onBackendChosen(item)}'></mwc-radio>        
               <div class='backendRadioGroupItem'>
                 <div class="backend_label">${item.label}</div>
                 <div class="backend_url">${item.url}${item.execEndpoint}</div>
               </div>
+              <mwc-icon 
+                class="deleteBackendBtn"
+                on-click="${()=>this.deleteBackend(index)}">delete</mwc-icon>
             </div>
           `)}
         `:''
@@ -44,7 +47,7 @@ class PhotonBackendPicker extends LitElement {
                   id$='backend_${item.id}'
                   value='backend_${item.id}'
                   name='backendRadioGroup' 
-                  checked?='${item.id === backend.id}'
+                  checked?='${this._equalBackends(backend, item)}'
                   on-click='${()=>this._onBackendChosen(item)}'></mwc-radio>        
               <div class='backendRadioGroupItem'>
                 <div class="backend_label">${item.label}</div>
@@ -61,6 +64,7 @@ class PhotonBackendPicker extends LitElement {
             id$='custom_backend'
             value='custom_backend'
             name='backendRadioGroup' 
+            checked?='${this._isCustomBackend()}'
             on-click='${()=>this._onCustomBackendChosen()}'></mwc-radio>       
         <photon-textfield 
             class="custom-backend-url" 
@@ -86,7 +90,7 @@ class PhotonBackendPicker extends LitElement {
               }
             }}"
             value="${customBackend.execEndpoint}"></photon-textfield>
-        ${_customBackendChoosen ? html`
+        ${(_customBackendChoosen || this._isCustomBackend()) ? html`
           <mwc-icon 
             class="saveBackendBtn"
             on-click="${()=>this.saveBackend()}">save</mwc-icon>`:''}
@@ -141,7 +145,6 @@ class PhotonBackendPicker extends LitElement {
     super();
     this.configuredBackends = [];
     this.customBackend = {
-      id: '',
       label: '',
       url: '',
       execEndpoint: '',
@@ -151,11 +154,11 @@ class PhotonBackendPicker extends LitElement {
       if (this.debug) {
         console.log('[photon-backend-picker] backend-change event listener', this.backend);
       }
-      sessionStorage.setItem('warp10-backend-conf', JSON.stringify(this.backend));
-      window.dispatchEvent(new StorageEvent('storage', {key: 'warp10-backend-conf'}));
-      if (this._isCustomBackend()) {
-        this.configuredBackends = [...this.configuredBackends, this.backend];
+      if (!this._equalBackends(this.backend, this.customBackend)) {
+        this.customBackend = { url: this.backend.url, execEndpoint: this.backend.execEndpoint };
       }
+      this._saveCurrentBackend();
+      window.dispatchEvent(new StorageEvent('storage', {key: 'warp10-backend-conf'}));
     });
   }
 
@@ -185,21 +188,22 @@ class PhotonBackendPicker extends LitElement {
   }
 
   _hasConfiguredBackends() {
-    return (this.configuredBackends && this.configuredBackends.length > 0);
+    return (this.conf.backends && this.conf.backends.length > 0);
   }
 
   _isCustomBackend() {
     if (this.debug) {
       console.log('[photon-backend-picker] _isCustomBackend',
-          this.backend, this.configuredBackends, this._savedBackends);
+          this.backend, this.conf.backends, this._savedBackends);
     }
     if (!this.backend) {
       return false;
     }
-    for (let index in this.configuredBackends) {
-      if (this._equalBackends(this.backend, this.configuredBackends[index])) {
+    for (let index in this.conf.backends) {
+      if (this._equalBackends(this.backend, this.conf.backends[index])) {
         if (this.debug) {
-          console.log('[photon-backend-picker] _isCustomBackend - false');
+          console.log('[photon-backend-picker] _isCustomBackend false - Backend in configuredBackends',
+              this.backend, this.conf.backends[index]);
         }
         return false;
       }
@@ -207,7 +211,7 @@ class PhotonBackendPicker extends LitElement {
     for (let index in this._savedBackends) {
       if (this._equalBackends(this.backend, this._savedBackends[index])) {
         if (this.debug) {
-          console.log('[photon-backend-picker] _isCustomBackend - false');
+          console.log('[photon-backend-picker] _isCustomBackend false  - Backend in configuredBackends');
         }
         return false;
       }
@@ -229,13 +233,26 @@ class PhotonBackendPicker extends LitElement {
   }
 
   _readBackendsFromLocalStorage() {
-    let backendsFromLocalStorage = localStorage.getItem('configuredBackends') || [];
+    let backendsFromLocalStorage = JSON.parse(localStorage.getItem('configuredBackends') || '[]');
     if (backendsFromLocalStorage && backendsFromLocalStorage.length > 0) {
       backendsFromLocalStorage.filter((backend) => {
         return (backend.id && backend.label && backend.url && backend.exec);
       });
     }
     return backendsFromLocalStorage;
+  }
+
+  _writeBackendsToLocalStorage(backends) {
+    localStorage.setItem('configuredBackends', JSON.stringify(backends));
+  }
+
+
+  _saveCurrentBackend() {
+    sessionStorage.setItem('warp10-backend-conf', JSON.stringify(this.backend));
+  }
+
+  _restoreCurrentBackend() {
+    this.backend = JSON.parse(sessionStorage.getItem('warp10-backend-conf'));
   }
 
   _onBackendChosen(backend) {
@@ -254,9 +271,23 @@ class PhotonBackendPicker extends LitElement {
   }
 
   saveBackend() {
+    if (!this._isCustomBackend()) {
+      return;
+    }
     if (this.debug) {
       console.log('[photon-backend-picker] saveBackend', this.customBackend);
     }
+    this._savedBackends = [...this._savedBackends, this.customBackend];
+    this._writeBackendsToLocalStorage(this._savedBackends);
+  }
+  deleteBackend(index) {
+    if (this.debug) {
+      console.log('[photon-backend-picker] deleteBackend', this._savedBackends[index]);
+    }
+    this._savedBackends.splice(index, 1);
+    console.log('[photon-backend-picker] deleteBackend', this._savedBackends);
+    this._savedBackends = [...this._savedBackends];
+    this._writeBackendsToLocalStorage(this._savedBackends);
   }
 
   _renderStyle() {
@@ -280,6 +311,13 @@ class PhotonBackendPicker extends LitElement {
         }
         .custom-backend-execEndpoint {
           --photon-textfield-width: 200px;
+        }
+        mwc-icon {
+          color: var(--app-primary-color);
+          cursor: pointer;
+        }
+        .deleteBackendBtn {
+          margin-left: 32px;
         }
       </style>
     `;

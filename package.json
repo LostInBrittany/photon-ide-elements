@@ -22,8 +22,5 @@
     "@polymer/iron-demo-helpers": "^3.0.0-pre.19",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "wct-browser-legacy": "^1.0.0"
-  },
-  "scripts": {
-    "postinstall": "cp -r ./lib/material-components-web-components/packages/textfield ./node_modules/@material/mwc-textfield"
   }
 }

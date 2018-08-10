@@ -136,7 +136,7 @@ class PhotonResponseInspector extends LitElement {
     return html`
       <style>
         .response-panel {
-          width: 100%;
+          width: calc(100% - 2rem);
           margin-top: 1.5rem;
           min-height: 1.5rem;
           padding: 1rem;

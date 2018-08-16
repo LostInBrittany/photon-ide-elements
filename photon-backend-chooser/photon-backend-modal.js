@@ -4,8 +4,7 @@ import photonSharedStyles from '../photon-shared-styles';
 
 import './photon-backend-picker';
 
-
-import '@material/mwc-radio';
+import '@material/mwc-icon';
 
 let modalStyles = html`
   <style>
@@ -35,19 +34,8 @@ let modalStyles = html`
         width: 80%; /* Could be more or less, depending on screen size */
         max-width: 800px;
     }
-
-    /* The Close Button */
-    .close {
-        color: #aaa;
+    .modal-close {
         float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
         cursor: pointer;
     } 
   </style>
@@ -64,6 +52,12 @@ class PhotonBackendModal extends LitElement {
               on-click="${(evt) => {
                 evt.stopPropagation();
               }}">
+              <div 
+                  class='modal-close'
+                  on-click="${(evt) => this._closeModal(evt)}">
+                <mwc-icon 
+                  class="modalCloseIcon">close</mwc-icon>
+              </div>
               <photon-backend-picker
                   backend='${backend}' 
                   conf='${conf}'

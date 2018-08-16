@@ -51,7 +51,6 @@ class PhotonResponsePlot extends LitElement {
 
   constructor() {
     super();
-    this.timestamps = true;
   }
 
   connectedCallback() {

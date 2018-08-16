@@ -125,33 +125,16 @@
     </header>
     
     <photon-query-editor debug cloak>
-        NEWGTS 'toto' RENAME
-        NOW 0 - NaN NaN NaN 25 ADDVALUE
-        NOW 1 h - NaN NaN NaN 24 ADDVALUE
+      NEWGTS
+      256 NaN NaN NaN 9.8 ADDVALUE 
+      456 NaN NaN NaN 9.8 ADDVALUE 
+      656 NaN NaN NaN 9.8 ADDVALUE 
+      666 NaN NaN NaN 9.8 ADDVALUE 
+      686 NaN NaN NaN 9.8 ADDVALUE 
+      856 NaN NaN NaN 9.8 ADDVALUE 
+      1256 NaN NaN NaN 9.8 ADDVALUE 
         
-        NEWGTS 'titi' RENAME { 'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'j' 'k' 'l' 'm' } RELABEL
-        NOW 0 - NaN NaN NaN 42 ADDVALUE
-        NOW 1 h - NaN NaN NaN 24 ADDVALUE
-        
-        [
-            NEWGTS 'toto' RENAME
-            NOW 0 - NaN NaN NaN 52 ADDVALUE
-            NOW 1 h - NaN NaN NaN 14 ADDVALUE
-            
-            NEWGTS 'titi' RENAME { 'a' 'b' } RELABEL
-            NOW 0 - NaN NaN NaN 25 ADDVALUE
-            NOW 1 h - NaN NaN NaN 41 ADDVALUE
-        ]
-        
-        { 
-            'a'
-            NEWGTS 'titi' RENAME { 'a' 'b' } RELABEL
-            NOW 0 - NaN NaN NaN 2 ADDVALUE
-            NOW 1 h - NaN NaN NaN 4 ADDVALUE
-        }
-        NOW
-        { 'a' 'b' }
-        [ 'a' NOW 'b' ]
+      'mean' RENAME
     </photon-query-editor>
     <noscript>
       Please enable JavaScript to view this website.

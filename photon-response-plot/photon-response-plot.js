@@ -214,10 +214,10 @@ class PhotonResponsePlot extends LitElement {
       console.log('[photon-response-plot] _renderC3 - stack', stack);
     }
 
-    let c3Data = timeseriesTools.timeseriesToC3(stack);
+    let c3Data = timeseriesTools.timeseriesToC3(stack, {}, this.timestamps);
     c3Data.unload = true;
     if (this.debug) {
-      console.log('[photon-response-plot] _renderC3 - c3Data', c3Data);
+      console.log('[photon-response-plot] _renderC3 - c3Data', c3Data, 'timestamps', this.timestamps);
     }
 
     if (c3Data.columns && c3Data.columns.length >0) {

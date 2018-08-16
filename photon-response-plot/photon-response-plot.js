@@ -2,16 +2,26 @@ import { LitElement, html } from '@polymer/lit-element';
 import photonSharedStyles from '../photon-shared-styles.js';
 import timeseriesTools from '@photon-elements/photon-tools/photon-timeseries-tools';
 import '@granite-elements/granite-c3/granite-c3';
+import '../photon-switch/photon-switch';
 
 class PhotonResponsePlot extends LitElement {
-  _render({ stack, plottedPaths }) {
+  _render({ stack, plottedPaths, timestamps, debug }) {
     if (!stack || !plottedPaths ) {
       return ``;
     }
-    // console.log('[photon-response-plot] - _render', this._dataFromPlottedTs(), stack, plottedPaths);
     return html`
         ${photonSharedStyles} 
-        ${this._renderC3()}
+        ${this._renderStyles()}
+        ${this._renderC3()}        
+        <div class="row flex justify-center">
+          <div class="horizontal-flex-item">Dates</div> 
+          <photon-switch 
+              checked="${timestamps}" 
+              on-change="${(evt) => this._onTimestampsChange(evt)}"
+              class="horizontal-flex-item"></photon-switch> 
+          <div class="horizontal-flex-item">Timestamps</div>           
+        </div>
+
         ${Object.entries(this._dataFromPlottedTs()).map((tsByLevel) => html`
           ${tsByLevel[1].length >0 ?
             html`
@@ -41,6 +51,7 @@ class PhotonResponsePlot extends LitElement {
 
   constructor() {
     super();
+    this.timestamps = true;
   }
 
   connectedCallback() {
@@ -56,21 +67,33 @@ class PhotonResponsePlot extends LitElement {
        * {Array<any>} A Warp 10 return stack
        */
       stack: Array,
+      /**
+       * Boolean If true, display timestamps instead of dates
+       */
+      timestamps: Boolean,
+      /**
+       * Boolean If true, log to the console
+       */
+      debug: Boolean,
     };
   }
 
   _renderStyles() {
     return html`
       <style>
-        .flex {
-          display: flex;
-        }
-        .key {
-          width: 150px;
+        photon-switch {
+          --mdc-theme-secondary: var(--app-primary-color);
         }
 
       </style>
     `;
+  }
+
+  _onTimestampsChange(evt) {
+    if (this.debug) {
+      console.log('[photon-response-plot] _onTimestampsChange - timestamps:', evt.detail.checked);
+    }
+    this.timestamps = evt.detail.checked;
   }
 
   _dataFromPlottedTs() {
@@ -82,7 +105,9 @@ class PhotonResponsePlot extends LitElement {
         return item;
       });
     });
-    console.log('rendering', this.plottedPaths, this.stack, plottedData);
+    if (this.debug) {
+      console.log('rendering', this.plottedPaths, this.stack, plottedData);
+    }
     return plottedData;
   }
 
@@ -101,6 +126,15 @@ class PhotonResponsePlot extends LitElement {
   }
 
   _chartConf() {
+    let point = {
+      r: 2,
+      focus: {
+        expand: {
+          enabled: true,
+          r: 4,
+        },
+      },
+    };
     let axis = {
       x: {
         show: true,
@@ -113,18 +147,49 @@ class PhotonResponsePlot extends LitElement {
           culling: { max: 4 },
           fit: true,
           multiline: true,
-          format: '%Y-%m-%d %H:%M:%S',
+          format: (x) => {
+            if (!this.timestamps) {
+              return x.toISOString().replace('T', ' ').replace(/\.[0-9]+Z/, '');
+            }
+            return x.getTime();
+          },
         },
+      },
+      y: {
+        show: true,
+        tick: {
+          centered: true,
+          outer: false,
+          fit: true,
+          format: (y) => {
+            let value = y.toFixed(5);
+            let splittedValue = value.split('.');
+            let formattedIntPart = splittedValue[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+            let formattedDecimalPart = splittedValue[1].replace(/0+$/g, '');
+            if (formattedDecimalPart.length === 0) {
+              return formattedIntPart;
+            }
+            return formattedIntPart + '.' + formattedDecimalPart;
+          },
+        },
+      },
+    };
+    let grid = {
+      x: {
+        show: true,
       },
       y: {
         show: true,
       },
     };
-    return {
+
+    let conf = {
       size: {
         height: 340,
       },
+      point: point,
       axis: axis,
+      grid: grid,
       legend: {
         hide: false,
       },
@@ -132,19 +197,30 @@ class PhotonResponsePlot extends LitElement {
         grouped: true,
       },
     };
+    if (this.debug) {
+      console.log('[photon-response-plot] _chartConf', conf);
+    }
+    return conf;
   }
 
   _renderC3() {
-    console.log('[photon-response-plot] _renderC3 - this._dataFromPlottedTs()', this._dataFromPlottedTs());
+    if (this.debug) {
+      console.log('[photon-response-plot] _renderC3 - this._dataFromPlottedTs()', this._dataFromPlottedTs());
+    }
+
     let stack = Object.entries(this._dataFromPlottedTs()).
         map((entry) => entry[1]).
         reduce((acc, val) => acc.concat(val), []);
-    console.log('[photon-response-plot] _renderC3 - stack', stack);
-  
+    if (this.debug) {
+      console.log('[photon-response-plot] _renderC3 - stack', stack);
+    }
+
     let c3Data = timeseriesTools.timeseriesToC3(stack);
     c3Data.unload = true;
-    console.log('[photon-response-plot] _renderC3 - c3Data', c3Data);
-    
+    if (this.debug) {
+      console.log('[photon-response-plot] _renderC3 - c3Data', c3Data);
+    }
+
     if (c3Data.columns && c3Data.columns.length >0) {
       return html`
         <granite-c3 

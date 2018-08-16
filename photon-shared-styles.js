@@ -54,6 +54,21 @@ const photonSharedStyles = html`
     justify-content: flex-end;
   }
 
+  .space-around {
+    justify-content: space-around;
+  }
+
+  .justify-center {
+    justify-content: center;
+  }
+
+  .flex > .horizontal-flex-item:not(:first-child) {
+    padding-left: 16px;
+  }
+  .flex > .horizontal-flex-item:not(:last-child) {
+    padding-right: 16px;
+  }
+
 </style>
 `;
 

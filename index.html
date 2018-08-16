@@ -78,7 +78,6 @@
     <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
     <!-- Load your application shell -->
-    <script type="module" src="./photon-query-app.js"></script>
     <script type="module" src="./photon-query-editor.js"></script>
 
     <!-- Add any global styles for body, document, etc. -->
@@ -109,6 +108,11 @@
         height: 48px;
         width: 48px;
       }
+
+      photon-query-editor[cloak] {
+        display: none;
+      }
+      
     </style>
   </head>    
   <body>
@@ -119,7 +123,36 @@
       </svg> 
       <div>Photon</div>
     </header>
-    <photon-query-app></photon-query-app>
+    
+    <photon-query-editor debug cloak>
+        NEWGTS 'toto' RENAME
+        NOW 0 - NaN NaN NaN 25 ADDVALUE
+        NOW 1 h - NaN NaN NaN 24 ADDVALUE
+        
+        NEWGTS 'titi' RENAME { 'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'j' 'k' 'l' 'm' } RELABEL
+        NOW 0 - NaN NaN NaN 42 ADDVALUE
+        NOW 1 h - NaN NaN NaN 24 ADDVALUE
+        
+        [
+            NEWGTS 'toto' RENAME
+            NOW 0 - NaN NaN NaN 52 ADDVALUE
+            NOW 1 h - NaN NaN NaN 14 ADDVALUE
+            
+            NEWGTS 'titi' RENAME { 'a' 'b' } RELABEL
+            NOW 0 - NaN NaN NaN 25 ADDVALUE
+            NOW 1 h - NaN NaN NaN 41 ADDVALUE
+        ]
+        
+        { 
+            'a'
+            NEWGTS 'titi' RENAME { 'a' 'b' } RELABEL
+            NOW 0 - NaN NaN NaN 2 ADDVALUE
+            NOW 1 h - NaN NaN NaN 4 ADDVALUE
+        }
+        NOW
+        { 'a' 'b' }
+        [ 'a' NOW 'b' ]
+    </photon-query-editor>
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>

@@ -142,6 +142,7 @@ class PhotonQueryEditor extends LitElement {
       editor: this.shadowRoot.querySelector('#editor'),
       warpscriptcaller: this.shadowRoot.querySelector('#warpscriptcaller'),
     };
+    this.removeAttribute('cloak');
   }
 
   initBackend() {
@@ -271,12 +272,14 @@ class PhotonQueryEditor extends LitElement {
             stack=${this.response.stack}
             on-plotted-changed='${(evt) => {
               this._plottedPaths = { ...evt.detail };
-            }}'></photon-response-inspector>    
+            }}'
+            debug="${this.debug}"></photon-response-inspector>    
       </div>
       <div class-"row">
         <photon-response-plot 
             stack=${this.response.stack}
-            plottedPaths=${this._plottedPaths}></photon-response-plot>
+            plottedPaths=${this._plottedPaths}
+            debug="${this.debug}"></photon-response-plot>
       </div>
       `;
     }

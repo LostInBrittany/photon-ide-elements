@@ -80,6 +80,10 @@ class PhotonResponsePlot extends LitElement {
   _renderStyles() {
     return html`
       <style>
+        :host {
+          display: block;
+          width: 100%;
+        }
         photon-switch {
           --mdc-theme-secondary: var(--app-primary-color);
         }

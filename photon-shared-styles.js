@@ -69,6 +69,9 @@ const photonSharedStyles = html`
     padding-right: 16px;
   }
 
+  *[cloak] {
+    display: none;
+  }
 </style>
 `;
 

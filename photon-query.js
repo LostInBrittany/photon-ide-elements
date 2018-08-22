@@ -10,11 +10,9 @@ import '@granite-elements/granite-yaml/granite-yaml-remote-parser';
 
 import './photon-query-editor';
 
-import './photon-response-inspector/photon-response-inspector';
-import './photon-response-plot/photon-response-plot';
-
 import './photon-backend-chooser/photon-backend-info';
 
+import historyHelper from './photon-history/photon-history-helper';
 
 /**
  * @customElement
@@ -51,6 +49,7 @@ class PhotonQuery extends LitElement {
           backend='${backend}'    
           warpscript='${warpscript}'
           debug='${debug}'
+          on-exec='${(evt) => this._onExec(evt)}'
           cloak
           >
       </photon-query-editor>
@@ -106,7 +105,16 @@ class PhotonQuery extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.initBackend();
-    this.warpscript = this.innerHTML || this.warpscript || '';
+    // Restoring from history
+    let lastExecWarpsacript = 
+        (historyHelper.last() &&  historyHelper.last().warpscript) ? 
+        historyHelper.last().warpscript : 
+        false;
+    this.backend = 
+        (historyHelper.last() &&  historyHelper.last().backend) ? 
+        historyHelper.last().backend : 
+        this.backend;
+    this.warpscript = lastExecWarpsacript || this.innerHTML || this.warpscript || '';
     this.removeAttribute('cloak');
   }
 
@@ -117,7 +125,6 @@ class PhotonQuery extends LitElement {
     } 
     this.backend = this._defaultBackend;
   }
-
 
 
   // ***************************************************************************
@@ -148,6 +155,17 @@ class PhotonQuery extends LitElement {
     }
     this.backend = this._defaultBackend;
   }
+
+  _onExec(evt) {
+    let backend = evt.detail.backend;
+    let warpscript = evt.detail.warpscript;
+    if (this.debug) {
+      console.debug('[photon-query] _onExec', {backend, warpscript});
+    }
+    let date = new Date();    
+    historyHelper.push({backend, warpscript, date})
+  }
+
 
   // ***************************************************************************
   // Renderers

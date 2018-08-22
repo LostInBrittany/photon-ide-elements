@@ -55,6 +55,19 @@ class PhotonQueryEditor extends LitElement {
     `;
   }
 
+
+  /**
+   * Fired when an execution is done
+   *
+   * @event exec
+   * @param {string} warpscript The warpscript being executed
+   * @param {object} backend The backend where the warpscript is executed
+   */
+
+
+  /**
+   * Properties
+   */
   static get properties() {
     return {
       /**

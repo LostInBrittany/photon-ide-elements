@@ -38,6 +38,9 @@ class PhotonQueryEditor extends LitElement {
             wrap="true"
             placeholder="Type your WarpScript here..."
             on-editor-content="${(evt) => this.editorChangeAction(evt)}"
+            on-keypress="${(evt) => evt.stopPropagation()}"
+            on-keydown="${(evt) => evt.stopPropagation()}"
+            on-keyup="${(evt) => evt.stopPropagation()}"
             initial-focus
             value="${warpscript}"
             debug="${debug}"> 

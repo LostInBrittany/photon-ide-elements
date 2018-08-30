@@ -14,6 +14,9 @@ import './photon-backend-chooser/photon-backend-info';
 
 import historyHelper from './photon-history/photon-history-helper';
 
+import hotkeys from 'hotkeys-js';
+
+
 /**
  * @customElement
  */
@@ -46,6 +49,7 @@ class PhotonQuery extends LitElement {
       </div>
 
       <photon-query-editor
+          id="photon-query-editor"
           backend='${backend}'    
           warpscript='${warpscript}'
           debug='${debug}'
@@ -116,6 +120,7 @@ class PhotonQuery extends LitElement {
         this.backend;
     this.warpscript = lastExecWarpsacript || this.innerHTML || this.warpscript || '';
     this.removeAttribute('cloak');
+    this._setHotkeys();
   }
 
   initBackend() {
@@ -165,6 +170,25 @@ class PhotonQuery extends LitElement {
     let date = new Date();    
     historyHelper.push({backend, warpscript, date})
   }
+
+
+  // ***************************************************************************
+  // Hotkeys
+  // ***************************************************************************
+
+  _setHotkeys() {
+
+    // Execute
+    hotkeys('e,r', (evt, handler) => {
+      let queryEditor = this._root.querySelector('#photon-query-editor');
+      if (this.debug) {
+        console.debug('[photon-query] hotkeys Execute', evt, queryEditor);
+      }
+      queryEditor.execute();
+    });
+  }
+  
+
 
 
   // ***************************************************************************

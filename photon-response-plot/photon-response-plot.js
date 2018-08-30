@@ -106,9 +106,9 @@ class PhotonResponsePlot extends LitElement {
       plottedData[pathsByLevel[0]] = pathsByLevel[1]
         .filter((path) => {
           return !!this._queryObj(this.stack[pathsByLevel[0]], path);
-        })      
+        })
         .map((path) => {
-          let item = this._queryObj(this.stack[pathsByLevel[0]], path);        
+          let item = this._queryObj(this.stack[pathsByLevel[0]], path);
             item.id=path;
             item.level = pathsByLevel[0];
             item.name = `${pathsByLevel[0]}: ${timeseriesTools.serializeTimeseriesMetadata(item)}`;

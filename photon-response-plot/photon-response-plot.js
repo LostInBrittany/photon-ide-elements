@@ -21,7 +21,7 @@ class PhotonResponsePlot extends LitElement {
               class="horizontal-flex-item"></photon-switch> 
           <div class="horizontal-flex-item">Timestamps</div>           
         </div>
-
+        <!--
         ${Object.entries(this._dataFromPlottedTs()).map((tsByLevel) => html`
           ${tsByLevel[1].length >0 ?
             html`
@@ -46,6 +46,7 @@ class PhotonResponsePlot extends LitElement {
             ''
           }
         `)}
+        -->
     `;
   }
 
@@ -105,11 +106,13 @@ class PhotonResponsePlot extends LitElement {
       plottedData[pathsByLevel[0]] = pathsByLevel[1].map((path) => {
         let item = this._queryObj(this.stack[pathsByLevel[0]], path);
         item.id=path;
+        item.level = pathsByLevel[0];
+        item.name = `${pathsByLevel[0]}: ${timeseriesTools.serializeTimeseriesMetadata(item)}`;
         return item;
       });
     });
     if (this.debug) {
-      console.log('rendering', this.plottedPaths, this.stack, plottedData);
+      console.log('[photon-response-plot] _dataFromPlottedTs', this.plottedPaths, this.stack, plottedData);
     }
     return plottedData;
   }

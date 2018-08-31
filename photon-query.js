@@ -178,13 +178,20 @@ class PhotonQuery extends LitElement {
 
   _setHotkeys() {
 
+    this._pressedHotkeys = {};
+
     // Execute
     hotkeys('e,r', (evt, handler) => {
+      if (this._pressedHotkeys['execute']) {
+        return;
+      }
+      this._pressedHotkeys['execute'] = true;
       let queryEditor = this._root.querySelector('#photon-query-editor');
       if (this.debug) {
         console.debug('[photon-query] hotkeys Execute', evt, queryEditor);
       }
       queryEditor.execute();
+      setTimeout(() => this._pressedHotkeys['execute'] = false, 2000);
     });
   }
   

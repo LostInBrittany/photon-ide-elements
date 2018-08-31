@@ -14,7 +14,7 @@ import './photon-backend-chooser/photon-backend-info';
 
 import historyHelper from './photon-history/photon-history-helper';
 
-import hotkeys from 'hotkeys-js';
+import './photon-hotkeys/photon-hotkeys';
 
 
 /**
@@ -48,6 +48,9 @@ class PhotonQuery extends LitElement {
             debug='${debug}'></photon-backend-info>
       </div>
 
+      <photon-hotkeys
+          on-execute='${() => this._root.querySelector('#photon-query-editor').execute()}'
+          ></photon-hotkeys>
       <photon-query-editor
           id="photon-query-editor"
           backend='${backend}'    
@@ -120,7 +123,6 @@ class PhotonQuery extends LitElement {
         this.backend;
     this.warpscript = lastExecWarpsacript || this.innerHTML || this.warpscript || '';
     this.removeAttribute('cloak');
-    this._setHotkeys();
   }
 
   initBackend() {
@@ -172,28 +174,7 @@ class PhotonQuery extends LitElement {
   }
 
 
-  // ***************************************************************************
-  // Hotkeys
-  // ***************************************************************************
 
-  _setHotkeys() {
-
-    this._pressedHotkeys = {};
-
-    // Execute
-    hotkeys('e,r', (evt, handler) => {
-      if (this._pressedHotkeys['execute']) {
-        return;
-      }
-      this._pressedHotkeys['execute'] = true;
-      let queryEditor = this._root.querySelector('#photon-query-editor');
-      if (this.debug) {
-        console.debug('[photon-query] hotkeys Execute', evt, queryEditor);
-      }
-      queryEditor.execute();
-      setTimeout(() => this._pressedHotkeys['execute'] = false, 2000);
-    });
-  }
   
 
 
@@ -201,7 +182,6 @@ class PhotonQuery extends LitElement {
   // ***************************************************************************
   // Renderers
   // ***************************************************************************
-
 
   _renderElementStyles() {
     return html`

@@ -45,6 +45,9 @@ class PhotonQuery extends LitElement {
               }
               this.backend = evt.detail;
             }}'
+            on-keypress="${(evt) => evt.stopPropagation()}"
+            on-keydown="${(evt) => evt.stopPropagation()}"
+            on-keyup="${(evt) => evt.stopPropagation()}"
             debug='${debug}'></photon-backend-info>
       </div>
 

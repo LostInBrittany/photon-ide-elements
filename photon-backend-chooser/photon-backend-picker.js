@@ -210,28 +210,28 @@ class PhotonBackendPicker extends LitElement {
   }
 
   _isCustomBackend() {
-    if (this.debug) {
-      console.log('[photon-backend-picker] _isCustomBackend',
-          this.backend, this.conf.backends, this._savedBackends);
-    }
     if (!this.backend) {
       return false;
     }
-    for (let index in this.conf.backends) {
-      if (this._equalBackends(this.backend, this.conf.backends[index])) {
-        if (this.debug) {
-          console.log('[photon-backend-picker] _isCustomBackend false - Backend in configuredBackends',
-              this.backend, this.conf.backends[index]);
+    if (this.conf && this.conf.backends) {
+      for (let index in this.conf.backends) {
+        if (this._equalBackends(this.backend, this.conf.backends[index])) {
+          if (this.debug) {
+            console.log('[photon-backend-picker] _isCustomBackend false - Backend in configuredBackends',
+                this.backend, this.conf.backends[index]);
+          }
+          return false;
         }
-        return false;
       }
     }
-    for (let index in this._savedBackends) {
-      if (this._equalBackends(this.backend, this._savedBackends[index])) {
-        if (this.debug) {
-          console.log('[photon-backend-picker] _isCustomBackend false  - Backend in configuredBackends');
+    if (this._savedBackends) {
+      for (let index in this._savedBackends) {
+        if (this._equalBackends(this.backend, this._savedBackends[index])) {
+          if (this.debug) {
+            console.log('[photon-backend-picker] _isCustomBackend false  - Backend in configuredBackends');
+          }
+          return false;
         }
-        return false;
       }
     }
     if (this.debug) {

@@ -36,6 +36,18 @@ let modalStyles = html`
         float: right;
         cursor: pointer;
     } 
+    .hotkey-key {
+      background-color: #333;
+      border: 1px solid #333;
+      border-radius: 5px;
+      box-shadow: 0 1px 0 #666 inset, 0 1px 0 #bbb;
+      color: #fff;
+      display: inline-block;
+      font-size: 1em;
+      margin-right: 5px;
+      padding: 5px 9px;
+      text-align: center;
+    }
   </style>
 `;
 
@@ -56,9 +68,30 @@ class PhotonHotkeyHelp extends LitElement {
             <mwc-icon 
               class="modalCloseIcon">close</mwc-icon>
           </div>
-          <h1>Hotkeys</h1>
-          <div><b>ctrl+e, e, r</b>: Execute</div>
-          <div><b>h</b>: Help</div> 
+          <h2>Hotkeys outside WarpScript editor</h2>
+          <p>            
+            <span class="hotkey-key">e</span>,
+            <span class="hotkey-key">r</span>
+            Execute WarpScript
+          </p>
+          <p>            
+            <span class="hotkey-key">h</span>
+            Help
+          </p>
+          <p>            
+            <span class="hotkey-key">Esc</span>
+            Close dialog
+          </p>
+          <hr />
+          <h2>Hotkeys in WarpScript editor</h2>
+          <p>            
+            <span class="hotkey-key">Ctrl+e</span>
+            Execute WarpScript
+          </p>
+          <p>            
+            <span class="hotkey-key">Ctrl+Space</span>
+            Editor autocompletion
+          </p>
         </div>
       </div>
     `;

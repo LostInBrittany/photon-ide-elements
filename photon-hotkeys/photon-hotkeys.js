@@ -51,6 +51,17 @@ class PhotonHotkeys extends LitElement {
         }
       );
     });
+
+    // Close dialog
+    shortcuts.add('esc', (evt) => {
+      this.hotkeyHandlerWrapper(evt, 'close',
+        () => {
+          this._hotkeysHelp = false;
+          this.dispatchEvent(new CustomEvent('close'));
+        },
+        this
+      );
+    });
   }
 
   hotkeyHandlerWrapper(evt, hotkey, callback) {
@@ -68,6 +79,7 @@ class PhotonHotkeys extends LitElement {
     if (_hotkeysHelp) {
       return html`
         <photon-hotkeys-help
+            id="hotkeyHelp"
             on-close='${() => this._hotkeysHelp = false }'></photon-hotkeys-help>
       `;
     }

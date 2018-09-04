@@ -1,5 +1,6 @@
 import { LitElement, html } from '@polymer/lit-element';
 import './photon-hotkeys-help';
+import './photon-hotkeys-regexp';
 
 import shortcuts from '@lostinbrittany/shortcuts';
 
@@ -7,6 +8,7 @@ import shortcuts from '@lostinbrittany/shortcuts';
 class PhotonHotkeys extends LitElement {
   static get properties() {
     return {
+      _hotkeysRegexp: Boolean,
       _hotkeysHelp: Boolean,
     };
   }
@@ -29,16 +31,18 @@ class PhotonHotkeys extends LitElement {
         () => this.dispatchEvent(new CustomEvent('execute'))
       );
     });
-    shortcuts.add('ctrl+e', (evt) => {
-      this.hotkeyHandlerWrapper(evt, 'execute',
-        () => {
-          this.dispatchEvent(new CustomEvent('execute'));
-        }
-      );
-    });
     shortcuts.add('r', (evt) => {
       this.hotkeyHandlerWrapper(evt, 'execute',
         () => this.dispatchEvent(new CustomEvent('execute'))
+      );
+    });
+
+    // Regexp
+    shortcuts.add('/', (evt) => {
+      this.hotkeyHandlerWrapper(evt, 'regexp',
+        () => {
+          this._hotkeysRegexp = true;
+        }
       );
     });
 
@@ -57,6 +61,7 @@ class PhotonHotkeys extends LitElement {
       this.hotkeyHandlerWrapper(evt, 'close',
         () => {
           this._hotkeysHelp = false;
+          this._hotkeysRegexp = false;
           this.dispatchEvent(new CustomEvent('close'));
         },
         this
@@ -74,13 +79,20 @@ class PhotonHotkeys extends LitElement {
     setTimeout(() => this._pressedHotkeys[hotkey] = false, 2000);
   }
 
-  _render( {_hotkeysHelp}) {
-    console.log('_hotkeyHelp', _hotkeysHelp);
+  _render( {_hotkeysHelp, _hotkeysRegexp}) {
     if (_hotkeysHelp) {
       return html`
         <photon-hotkeys-help
             id="hotkeyHelp"
             on-close='${() => this._hotkeysHelp = false }'></photon-hotkeys-help>
+      `;
+    }
+    if (_hotkeysRegexp) {
+      return html`
+        <photon-hotkeys-regexp
+            id="hotkeyRegexp"
+            on-regexp='${(evt) => console.log('[REGEXP]', evt.detail)}'
+            on-close='${() => this._hotkeysRegexp = false }'></photon-hotkeys-regexp>
       `;
     }
     return html``;

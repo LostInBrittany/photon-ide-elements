@@ -333,12 +333,12 @@ class PhotonQueryEditor extends LitElement {
       granite-alert[hidden] {
         display: none;
       }
-      paper-button {
+      mwc-button {
         background-color: var(--app-primary-color);
         color: var(--app-primary-contrast);
         margin: 5px;
       }
-      paper-button iron-icon {
+      mwc-button iron-icon {
         padding-right: 10px;
       }
 

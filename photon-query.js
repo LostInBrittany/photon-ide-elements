@@ -1,22 +1,24 @@
 import { LitElement, html } from '@polymer/lit-element';
 
-import photonSharedStyles from './photon-shared-styles';
-
-import '@material/mwc-button/mwc-button';
+import '@granite-elements/granite-yaml/granite-yaml-remote-parser';
 
 import PhotonWarpscriptExec from '@photon-elements/photon-tools/photon-warpscript-exec';
 
-import '@granite-elements/granite-yaml/granite-yaml-remote-parser';
+import shortcuts from '@lostinbrittany/shortcuts';
+
+import '@material/mwc-button/mwc-button';
+
+
+import photonSharedStyles from './photon-shared-styles';
+
+import historyHelper from './photon-history/photon-history-helper';
 
 import './photon-query-editor';
 
 import './photon-backend-chooser/photon-backend-info';
 
-import historyHelper from './photon-history/photon-history-helper';
-
 import './photon-hotkeys/photon-hotkeys';
 
-import shortcuts from '@lostinbrittany/shortcuts';
 /**
  * @customElement
  */

@@ -57,7 +57,7 @@ class PhotonHotkeyHelp extends LitElement {
               class="modalCloseIcon">close</mwc-icon>
           </div>
           <h1>Hotkeys</h1>
-          <div><b>e, r</b>: Execute</div>
+          <div><b>ctrl+e, e, r</b>: Execute</div>
           <div><b>h</b>: Help</div> 
         </div>
       </div>

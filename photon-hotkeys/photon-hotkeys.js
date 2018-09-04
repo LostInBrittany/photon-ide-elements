@@ -1,6 +1,8 @@
 import { LitElement, html } from '@polymer/lit-element';
 import './photon-hotkeys-help';
-import hotkeys from 'hotkeys-js';
+
+import shortcuts from '@lostinbrittany/shortcuts';
+
 
 class PhotonHotkeys extends LitElement {
   static get properties() {
@@ -22,24 +24,43 @@ class PhotonHotkeys extends LitElement {
     this._pressedHotkeys = {};
 
     // Execute
-    hotkeys('e,r', (evt, handler) => {
-      if (this._pressedHotkeys['execute']) {
-        return;
-      }
-      this._pressedHotkeys['execute'] = true;
-      this.dispatchEvent(new CustomEvent('execute'));
-      setTimeout(() => this._pressedHotkeys['execute'] = false, 2000);
+    shortcuts.add('e', (evt) => {
+      this.hotkeyHandlerWrapper(evt, 'execute',
+        () => this.dispatchEvent(new CustomEvent('execute'))
+      );
+    });
+    shortcuts.add('ctrl+e', (evt) => {
+      this.hotkeyHandlerWrapper(evt, 'execute',
+        () => {
+          this.dispatchEvent(new CustomEvent('execute'));
+        }
+      );
+    });
+    shortcuts.add('r', (evt) => {
+      this.hotkeyHandlerWrapper(evt, 'execute',
+        () => this.dispatchEvent(new CustomEvent('execute'))
+      );
     });
 
     // Help
-    hotkeys('h', (evt, handler) => {
-      if (this._pressedHotkeys['help']) {
-        return;
-      }
-      this._hotkeysHelp = true;
-      this.dispatchEvent(new CustomEvent('help'));
-      setTimeout(() => this._pressedHotkeys['help'] = false, 2000);
+    shortcuts.add('h', (evt) => {
+      this.hotkeyHandlerWrapper(evt, 'help',
+        () => {
+          this._hotkeysHelp = true;
+          this.dispatchEvent(new CustomEvent('help'));
+        }
+      );
     });
+  }
+
+  hotkeyHandlerWrapper(evt, hotkey, callback) {
+    evt.preventDefault();
+    if (this._pressedHotkeys[hotkey]) {
+      return;
+    }
+    this._pressedHotkeys[hotkey] = true;
+    callback();
+    setTimeout(() => this._pressedHotkeys[hotkey] = false, 2000);
   }
 
   _render( {_hotkeysHelp}) {

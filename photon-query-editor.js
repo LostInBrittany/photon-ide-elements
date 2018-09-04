@@ -17,6 +17,7 @@ import './photon-response-plot/photon-response-plot';
 
 import './photon-backend-chooser/photon-backend-info';
 
+import shortcuts from '@lostinbrittany/shortcuts';
 
 /**
  * @customElement
@@ -121,9 +122,31 @@ class PhotonQueryEditor extends LitElement {
       warpscriptcaller: this.shadowRoot.querySelector('#warpscriptcaller'),
     };
     this.removeAttribute('cloak');
+
+    this._setHotkeys()
   }
 
+  _setHotkeys() {
+    this._pressedHotkeys = {};
 
+    // Execute
+    shortcuts.add('ctrl+e', (evt) => {
+        this.hotkeyHandlerWrapper(evt, 'execute', () => this.execute());
+      },
+      this.$.editor
+    );
+  }
+
+  hotkeyHandlerWrapper(evt, hotkey, callback) {
+    console.log('[photon-query-editor] hotkeyHandlerWrapper', hotkey)
+    evt.preventDefault();
+    if (this._pressedHotkeys[hotkey]) {
+      return;
+    }
+    this._pressedHotkeys[hotkey] = true;
+    callback();
+    setTimeout(() => this._pressedHotkeys[hotkey] = false, 2000);
+  }
 
   // ***************************************************************************
   // Event listeners

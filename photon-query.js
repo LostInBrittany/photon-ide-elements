@@ -16,7 +16,7 @@ import historyHelper from './photon-history/photon-history-helper';
 
 import './photon-hotkeys/photon-hotkeys';
 
-
+import shortcuts from '@lostinbrittany/shortcuts';
 /**
  * @customElement
  */
@@ -53,6 +53,7 @@ class PhotonQuery extends LitElement {
 
       <photon-hotkeys
           on-execute='${() => this._root.querySelector('#photon-query-editor').execute()}'
+          debug='${debug}'
           ></photon-hotkeys>
       <photon-query-editor
           id="photon-query-editor"
@@ -126,6 +127,7 @@ class PhotonQuery extends LitElement {
         this.backend;
     this.warpscript = lastExecWarpsacript || this.innerHTML || this.warpscript || '';
     this.removeAttribute('cloak');
+    shortcuts.add('d', () => console.log('[SHORTCUTS] d pressed'));
   }
 
   initBackend() {

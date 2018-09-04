@@ -2,12 +2,7 @@ import { LitElement, html } from '@polymer/lit-element';
 
 import '@granite-elements/granite-yaml/granite-yaml-remote-parser';
 
-import PhotonWarpscriptExec from '@photon-elements/photon-tools/photon-warpscript-exec';
-
 import shortcuts from '@lostinbrittany/shortcuts';
-
-import '@material/mwc-button/mwc-button';
-
 
 import photonSharedStyles from './photon-shared-styles';
 
@@ -207,12 +202,6 @@ class PhotonQuery extends LitElement {
         text-transform: capitalize;
       }
 
-      .button_bar {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-      }
-
       .clearfix:before,
       .clearfix:after {
         content: " "; /* 1 */
@@ -232,14 +221,6 @@ class PhotonQuery extends LitElement {
       }
       granite-alert[hidden] {
         display: none;
-      }
-      paper-button {
-        background-color: var(--app-primary-color);
-        color: var(--app-primary-contrast);
-        margin: 5px;
-      }
-      paper-button iron-icon {
-        padding-right: 10px;
       }
 
       granite-spinner {

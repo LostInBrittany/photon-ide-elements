@@ -257,7 +257,9 @@ class PhotonQueryEditor extends LitElement {
     }
 
     this._plottedPaths = this.response.stack.map((line) => flattenWithPath(line, '$'));    
-    console.log('PlottedPaths', this._plottedPaths)
+    if (this.debug) {
+      console.log('[photon-query-editor] selectAll - plotted paths', this._plottedPaths);
+    }
   }
 
   selectNone() {
@@ -267,6 +269,7 @@ class PhotonQueryEditor extends LitElement {
     if (this.debug) {
       console.log('[photon-query-editor] selectNone');
     }
+    this._plottedPaths = [];
   }
 
   selectRegExp() {

@@ -46,6 +46,20 @@ class PhotonHotkeys extends LitElement {
       );
     });
 
+    // Select all
+    shortcuts.add('a', (evt) => {
+      this.hotkeyHandlerWrapper(evt, 'select-all',
+        () => this.dispatchEvent(new CustomEvent('select-all'))
+      );
+    });
+
+    // Select all
+    shortcuts.add('n', (evt) => {
+      this.hotkeyHandlerWrapper(evt, 'select-none',
+        () => this.dispatchEvent(new CustomEvent('select-none'))
+      );
+    });
+
     // Help
     shortcuts.add('h', (evt) => {
       this.hotkeyHandlerWrapper(evt, 'help',

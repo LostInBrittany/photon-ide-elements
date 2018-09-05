@@ -49,9 +49,13 @@ class PhotonQuery extends LitElement {
       </div>
 
       <photon-hotkeys
-          on-execute='${() => this._root.querySelector('#photon-query-editor').execute()}'
+          on-execute='${() => this.queryEditor.execute()}'
+          on-select-all='${() => this.queryEditor.selectAll()}'
+          on-select-none='${() => this.queryEditor.selectNone()}'
+          on-select-regexp='${() => this.queryEditor.selectRegExp()}'
           debug='${debug}'
           ></photon-hotkeys>
+
       <photon-query-editor
           id="photon-query-editor"
           backend='${backend}'    
@@ -123,8 +127,8 @@ class PhotonQuery extends LitElement {
         historyHelper.last().backend : 
         this.backend;
     this.warpscript = lastExecWarpsacript || this.innerHTML || this.warpscript || '';
+    this.queryEditor = this._root.querySelector('#photon-query-editor');
     this.removeAttribute('cloak');
-    shortcuts.add('d', () => console.log('[SHORTCUTS] d pressed'));
   }
 
   initBackend() {

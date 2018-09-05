@@ -17,6 +17,7 @@ import './photon-response-plot/photon-response-plot';
 
 import './photon-backend-chooser/photon-backend-info';
 
+import timeseriesTools from '@photon-elements/photon-tools/photon-timeseries-tools';
 import shortcuts from '@lostinbrittany/shortcuts';
 
 /**
@@ -234,6 +235,48 @@ class PhotonQueryEditor extends LitElement {
     return `${(this.elapsed / 1000000000).toFixed(3)} s`;
   }
 
+
+  selectAll() {
+    if (!this.response) {
+      return;
+    }
+    function flattenWithPath(element, path) {
+      if (Array.isArray(element)) {
+        return element.reduce((acc, val, index) => {
+          if (Array.isArray(val)) {
+            return acc.concat(flattenWithPath(val, `${path}.${index}`));
+          }
+          if (timeseriesTools.isTimeseries(val)) {
+            return acc.concat(`${path}.${index}`)
+          }
+        }, []);
+      }
+      if (timeseriesTools.isTimeseries(element)) {
+        return [ path ];
+      }
+    }
+
+    this._plottedPaths = this.response.stack.map((line) => flattenWithPath(line, '$'));    
+    console.log('PlottedPaths', this._plottedPaths)
+  }
+
+  selectNone() {
+    if (!this.response) {
+      return;
+    }
+    if (this.debug) {
+      console.log('[photon-query-editor] selectNone');
+    }
+  }
+
+  selectRegExp() {
+    if (!this.response) {
+      return;
+    }
+    if (this.debug) {
+      console.log('[photon-query-editor] selectRegExp');
+    }
+  }
   // ***************************************************************************
   // Renderers
   // ***************************************************************************

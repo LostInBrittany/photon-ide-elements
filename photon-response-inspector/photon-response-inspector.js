@@ -64,6 +64,18 @@ class PhotonResponseInspector extends LitElement {
     return this;
   }
 
+  _shouldRender(props, changedProps, prevProps) {
+    if (this.stack) {
+      this.stack.forEach((item, index) => {
+        if (!this.plottedTs[index]) {
+          this.plottedTs[index] = [];
+        }
+      });
+    }
+    return true;
+  }
+
+
   _render({ stack, nodeRenderer }) {
     let iterator = createIterator(true);
     return html`
@@ -118,6 +130,7 @@ class PhotonResponseInspector extends LitElement {
       nodeRenderer: Function,
     };
   }
+
 
   _onPlotTs(detail, index) {
     if (!this.plottedTs[index]) {

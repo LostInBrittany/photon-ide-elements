@@ -75,6 +75,19 @@ class PhotonHotkeyHelp extends LitElement {
             Execute WarpScript
           </p>
           <p>            
+            <span class="hotkey-key">a</span>
+            Plot all the timeseries
+          </p>
+          <p>            
+            <span class="hotkey-key">n</span>
+            Don't plot any timeseries
+          </p>
+          <p>            
+            <span class="hotkey-key">/</span>
+            Use a RegExp to select the timeseries to plot
+          </p>
+          <p>     
+          <p>            
             <span class="hotkey-key">h</span>
             Help
           </p>

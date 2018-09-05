@@ -122,7 +122,7 @@ class PhotonHotkeyRegexp extends LitElement {
   }
 
   _select(evt) {
-    this.dispatchEvent(new CustomEvent('regexp', {detail: this._regexp }));
+    this.dispatchEvent(new CustomEvent('select-regexp', {detail: this._regexp, bubbles: true, composed: true }));
   }
 }
 

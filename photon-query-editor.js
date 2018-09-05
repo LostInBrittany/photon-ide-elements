@@ -272,13 +272,35 @@ class PhotonQueryEditor extends LitElement {
     this._plottedPaths = [];
   }
 
-  selectRegExp() {
+  selectRegExp(regexp) {
     if (!this.response) {
       return;
     }
-    if (this.debug) {
-      console.log('[photon-query-editor] selectRegExp');
+    function flattenWithPath(element, path) {
+      if (Array.isArray(element)) {
+        return element.reduce((acc, val, index) => {
+          if (Array.isArray(val)) {
+            return acc.concat(flattenWithPath(val, `${path}.${index}`));
+          }
+          if (timeseriesTools.isTimeseries(val)
+              && timeseriesTools.serializeTimeseriesMetadata(val).match(regexp)) {
+            return acc.concat(`${path}.${index}`)
+          }
+        }, []);
+      }
+      if (timeseriesTools.isTimeseries(element) 
+          && timeseriesTools.serializeTimeseriesMetadata(element).match(regexp)) {
+        return [ path ];
+      }
+      return [];
     }
+
+    this._plottedPaths = this.response.stack
+        .map((line) => flattenWithPath(line, '$')); 
+    if (this.debug) {
+      console.log(`[photon-query-editor] selectRegExp /${regexp}/`, this._plottedPaths);
+    }
+
   }
   // ***************************************************************************
   // Renderers

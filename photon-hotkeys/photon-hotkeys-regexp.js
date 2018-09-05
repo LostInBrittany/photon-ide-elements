@@ -5,6 +5,7 @@ import '@material/mwc-button';
 
 
 import photonSharedStyles from '../photon-shared-styles';
+import shortcuts from '@lostinbrittany/shortcuts';
 
 import '../photon-textfield/photon-textfield';
 
@@ -113,6 +114,18 @@ class PhotonHotkeyRegexp extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this._regexp = '';
+    this._setHotkeys();
+    this._root.querySelector('photon-textfield').focus();
+  }
+
+  // ***************************************************************************
+  // Hotkeys
+  // ***************************************************************************
+
+  _setHotkeys() {
+    this._pressedHotkeys = {};
+    // Help
+    shortcuts.add('enter', (evt) => this._select(evt), this);
   }
 
   _closeModal(evt) {
@@ -123,6 +136,7 @@ class PhotonHotkeyRegexp extends LitElement {
 
   _select(evt) {
     this.dispatchEvent(new CustomEvent('select-regexp', {detail: this._regexp, bubbles: true, composed: true }));
+    this._closeModal(evt);
   }
 }
 

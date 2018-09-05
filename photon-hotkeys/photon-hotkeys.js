@@ -105,6 +105,9 @@ class PhotonHotkeys extends LitElement {
       return html`
         <photon-hotkeys-regexp
             id="hotkeyRegexp"
+            on-keypress="${(evt) => evt.stopPropagation()}"
+            on-keydown="${(evt) => evt.stopPropagation()}"
+            on-keyup="${(evt) => evt.stopPropagation()}"
             on-regexp='${(evt) => console.log('[REGEXP]', evt.detail)}'
             on-close='${() => this._hotkeysRegexp = false }'></photon-hotkeys-regexp>
       `;

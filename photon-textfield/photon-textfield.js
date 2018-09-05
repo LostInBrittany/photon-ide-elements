@@ -97,7 +97,18 @@ export class Textfield extends ComponentElement {
   }
 
   _renderInput({value, required, type, placeHolder, label}) {
-    return html`<input type="text" type$="${type}" placeholder$="${placeHolder}" required?="${required}" class$="mdc-text-field__input ${value ? 'mdc-text-field--upgraded' : ''}" id="text-field" value="${value}" aria-label$="${label}" on-input='${(evt) => this.dispatchEvent(new CustomEvent('change', {detail: this._input.value, bubbles: true, composed: true}))}'>`;
+    return html`
+      <input t
+          ype="text" type$="${type}" placeholder$="${placeHolder}" required?="${required}" 
+          class$="mdc-text-field__input ${value ? 'mdc-text-field--upgraded' : ''}" 
+          id="text-field" 
+          value="${value}" 
+          aria-label$="${label}" 
+          on-input='${(evt) => {
+            this.value = this._input.value;
+            this.dispatchEvent(new CustomEvent('change', {detail: this._input.value, bubbles: true, composed: true}))
+          }}'>
+    `;
   }
 
   ready() {

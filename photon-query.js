@@ -52,7 +52,7 @@ class PhotonQuery extends LitElement {
           on-execute='${() => this.queryEditor.execute()}'
           on-select-all='${() => this.queryEditor.selectAll()}'
           on-select-none='${() => this.queryEditor.selectNone()}'
-          on-select-regexp='${() => this.queryEditor.selectRegExp()}'
+          on-select-regexp='${(evt) => this.queryEditor.selectRegExp(evt.detail)}'
           debug='${debug}'
           ></photon-hotkeys>
 

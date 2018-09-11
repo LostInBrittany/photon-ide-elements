@@ -222,7 +222,7 @@ class PhotonQueryEditor extends LitElement {
     }
   }
 
-  _formatElapsedTime(elapsed) {
+  _formatElapsedTime(elapsed) {  console.log('ELAPSED', elapsed)
     if (elapsed < 1000) {
       return `${this.elapsed} ns`;
     }
@@ -231,8 +231,8 @@ class PhotonQueryEditor extends LitElement {
     }
     if (elapsed < 1000000000) {
       return `${(elapsed / 1000000).toFixed(3)} ms`;
-    }
-    return `${(this.elapsed / 1000000000).toFixed(3)} s`;
+    } 
+    return `${(elapsed / 1000000000).toFixed(3)} s`;
   }
 
 

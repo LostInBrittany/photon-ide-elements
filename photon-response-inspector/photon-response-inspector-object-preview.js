@@ -28,9 +28,9 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
     return this;
   }
 
-  _render({ data, path }) {
+  _render({ data, path, expanded }) {
     return html`
-      ${this.markup(data, path)}
+      ${this.markup(data, path, expanded)}
     `;
   }
 
@@ -39,6 +39,7 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
       data: Object,
       path: String,
       maxProperties: Number,
+      expanded: Boolean,
     };
   }
 
@@ -58,30 +59,37 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
 
     if (this.data instanceof Array) {
       return html`
-        <span class='objectValueObject'>
-          <span>(${this.data.length}) [</span>
-            ${html`${
-              this.data.map((element, i) => {
-                if (timeseriesTools.isTimeseries(element)) {
-                  return html`                  
-                    <photon-timeseries-renderer ts=${element} path='${this.path}.${i}'></photon-timeseries-renderer>                    
-                    ${i<this.data.length-1 ? html`<span>,&nbsp;</span>` : ``}`;
-                } else {
-                  return html`
-                    <granite-inspector-object-value data=${element}></granite-inspector-object-value> 
-                    ${i<this.data.length-1 ? html`<span>,&nbsp;</span>` : ``}
-                  `;
-                }
-              })
-            }`}
-          <span>]</span>
+        <span class='objectValueObject'> 
+          <span>(${this.data.length})</span>
+
+          ${
+            this.expanded
+            ? ''
+            : html`
+              <span>[</span>]
+              ${html`${
+                this.data.map((element, i) => {
+                  if (timeseriesTools.isTimeseries(element)) {
+                    return html`                  
+                      <photon-timeseries-renderer ts=${element} path='${this.path}.${i}'></photon-timeseries-renderer>                    
+                      ${i<this.data.length-1 ? html`<span>,&nbsp;</span>` : ``}`;
+                  } else {
+                    return html`
+                      <granite-inspector-object-value data=${element}></granite-inspector-object-value> 
+                      ${i<this.data.length-1 ? html`<span>,&nbsp;</span>` : ``}
+                    `;
+                  }
+                })
+              }`}
+              <span>]</span>
+            `
+          }
         </span>
       `;
     } else if (typeof this.data === 'string') {
       return html`<granite-inspector-object-value data='${this.data}' ></granite-inspector-object-value>`;
     } else if (timeseriesTools.isTimeseries(this.data)) {
-      return html`        
-        <photon-timeseries-renderer ts=${this.data} path=${this.path}></photon-timeseries-renderer> `;
+        return html`<photon-timeseries-renderer ts=${this.data} path=${this.path}></photon-timeseries-renderer> `;
     } else {
       let propertyNodes = [];
       for (let propertyName in this.data) {

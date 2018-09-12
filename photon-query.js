@@ -123,7 +123,9 @@ class PhotonQuery extends LitElement {
 
     let decodedPermalink = permalinkTools.decodePermalink(location.hash);
 
-
+    if (this.debug) {
+      console.log('[photon-query] connectedCallback - decodedPermalink', decodedPermalink);
+    }
     // Restoring from history
     let lastExecWarpsacript = 
         (historyHelper.last() &&  historyHelper.last().warpscript) ? 
@@ -133,7 +135,7 @@ class PhotonQuery extends LitElement {
         (historyHelper.last() &&  historyHelper.last().backend) ? 
         historyHelper.last().backend : 
         this.backend;
-    this.backend = decodedPermalink.backend || this.this.backend;    
+    this.backend = decodedPermalink.backend || this.backend;    
     this.warpscript = decodedPermalink.warpscript || lastExecWarpsacript || this.innerHTML || this.warpscript || '';
     this.queryEditor = this._root.querySelector('#photon-query-editor');
     this.removeAttribute('cloak');

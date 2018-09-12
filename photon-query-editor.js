@@ -18,6 +18,7 @@ import './photon-response-plot/photon-response-plot';
 import './photon-backend-chooser/photon-backend-info';
 
 import timeseriesTools from '@photon-elements/photon-tools/photon-timeseries-tools';
+import permalinkTools from '@photon-elements/photon-tools/photon-permalink-tools';
 import looseJSON from '@photon-elements/photon-tools/photon-looseJSON';
 import shortcuts from '@lostinbrittany/shortcuts';
 
@@ -317,6 +318,15 @@ class PhotonQueryEditor extends LitElement {
 
   _renderResponseMetadata() {
     return html`
+      <div class="row">
+        <p>
+          Permalink:
+          <a href="#/permalink${permalinkTools.generatePermalink(this.warpscript, this.backend)}">
+            #/permalink${permalinkTools.cropPermalink(
+              permalinkTools.generatePermalink(this.warpscript, this.backend), 50)}
+          </a>
+        </p>
+      </div>
       <div class="row flex-end">
           Your last script execution took ${this._formatElapsedTime(this.response.options.elapsed)} serverside, 
           fetched ${this.response.options.fetched} datapoints and performed 

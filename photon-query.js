@@ -12,6 +12,8 @@ import './photon-query-editor';
 
 import './photon-backend-chooser/photon-backend-info';
 
+import permalinkTools from '@photon-elements/photon-tools/photon-permalink-tools';
+
 import './photon-hotkeys/photon-hotkeys';
 
 /**
@@ -117,6 +119,11 @@ class PhotonQuery extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.initBackend();
+
+
+    let decodedPermalink = permalinkTools.decodePermalink(location.hash);
+
+
     // Restoring from history
     let lastExecWarpsacript = 
         (historyHelper.last() &&  historyHelper.last().warpscript) ? 
@@ -126,7 +133,8 @@ class PhotonQuery extends LitElement {
         (historyHelper.last() &&  historyHelper.last().backend) ? 
         historyHelper.last().backend : 
         this.backend;
-    this.warpscript = lastExecWarpsacript || this.innerHTML || this.warpscript || '';
+    this.backend = decodedPermalink.backend || this.this.backend;    
+    this.warpscript = decodedPermalink.warpscript || lastExecWarpsacript || this.innerHTML || this.warpscript || '';
     this.queryEditor = this._root.querySelector('#photon-query-editor');
     this.removeAttribute('cloak');
   }

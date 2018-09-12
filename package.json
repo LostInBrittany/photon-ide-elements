@@ -15,7 +15,7 @@
     "@material/mwc-switch": "^0.1.2",
     "@material/textfield": "^0.38.0",
     "@photon-elements/photon-iron": "^1.3.0",
-    "@photon-elements/photon-tools": "^1.5.5",
+    "@photon-elements/photon-tools": "^1.6.5",
     "@polymer/lit-element": "^0.5.2",
     "@polymer/polymer": "^3.0.0"
   },
@@ -24,5 +24,5 @@
     "@webcomponents/webcomponentsjs": "^2.1.0",
     "wct-browser-legacy": "^1.0.0"
   },
-  "version": "1.0.21"
+  "version": "1.0.22"
 }

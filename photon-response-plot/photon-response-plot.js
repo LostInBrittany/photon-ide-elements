@@ -102,6 +102,9 @@ class PhotonResponsePlot extends LitElement {
 
   _dataFromPlottedTs() {
     let plottedData = {};
+    if (this.debug) {
+      console.log('[photon-response-plot] _dataFromPlottedTs - plottedPaths:', this.plottedPaths);
+    }
     Object.entries(this.plottedPaths).forEach((pathsByLevel) => {
       plottedData[pathsByLevel[0]] = pathsByLevel[1]
         .filter((path) => {

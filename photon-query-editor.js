@@ -18,6 +18,7 @@ import './photon-response-plot/photon-response-plot';
 import './photon-backend-chooser/photon-backend-info';
 
 import timeseriesTools from '@photon-elements/photon-tools/photon-timeseries-tools';
+import looseJSON from '@photon-elements/photon-tools/photon-looseJSON';
 import shortcuts from '@lostinbrittany/shortcuts';
 
 /**
@@ -183,7 +184,7 @@ class PhotonQueryEditor extends LitElement {
 
   _handleResponse(response) {
     if (this.debug) {
-      console.log('[photon-query-editor] _handleResponse', response);
+      console.log('[photon-query-editor] _handleResponse', response, looseJSON.stringify(response.stack));
     }
     this.dispatchEvent(new CustomEvent('response', {
       detail: {
@@ -331,6 +332,7 @@ class PhotonQueryEditor extends LitElement {
       <div class="row">
         <photon-response-inspector 
             stack=${this.response.stack}
+            plottedPaths=${this._plottedPaths}
             on-plotted-changed='${(evt) => {
               this._plottedPaths = { ...evt.detail };
             }}'

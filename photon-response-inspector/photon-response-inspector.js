@@ -67,8 +67,8 @@ class PhotonResponseInspector extends LitElement {
   _shouldRender(props, changedProps, prevProps) {
     if (this.stack) {
       this.stack.forEach((item, index) => {
-        if (!this.plottedTs[index]) {
-          this.plottedTs[index] = [];
+        if (!this.plottedPaths[index]) {
+          this.plottedPaths[index] = [];
         }
       });
     }
@@ -115,7 +115,7 @@ class PhotonResponseInspector extends LitElement {
     super();
     this.styles = createStyles(photonTheme);
     this.nodeRenderer = defaultNodeRenderer;
-    this.plottedTs = {};
+    this.plottedPaths = {};
   }
 
   connectedCallback() {
@@ -127,22 +127,23 @@ class PhotonResponseInspector extends LitElement {
        * The Warp 10 response stack you would like to inspect
        */
       stack: Array,
+      plottedPaths: Array,
       nodeRenderer: Function,
     };
   }
 
 
   _onPlotTs(detail, index) {
-    if (!this.plottedTs[index]) {
-      this.plottedTs[index] = [];
+    if (!this.plottedPaths[index]) {
+      this.plottedPaths[index] = [];
     }
-    if (this.plottedTs[index].indexOf(detail.path) < 0) {
-      this.plottedTs[index].push(detail.path);
+    if (this.plottedPaths[index].indexOf(detail.path) < 0) {
+      this.plottedPaths[index].push(detail.path);
     } else {
-      this.plottedTs[index].splice(this.plottedTs[index].indexOf(detail.path), 1);
+      this.plottedPaths[index].splice(this.plottedPaths[index].indexOf(detail.path), 1);
     }
-    this.dispatchEvent(new CustomEvent('plotted-changed', { detail: this.plottedTs }));
-    console.log('[photon-response-inspector] _onPlotTs', this.plottedTs);
+    this.dispatchEvent(new CustomEvent('plotted-changed', { detail: this.plottedPaths }));
+    console.log('[photon-response-inspector] _onPlotTs', this.plottedPaths);
   }
 
   _renderElementStyles() {

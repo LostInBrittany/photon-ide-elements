@@ -121,7 +121,7 @@ class PhotonQuery extends LitElement {
     this.initBackend();
 
 
-    let decodedPermalink = permalinkTools.decodePermalink(location.hash);
+    let decodedPermalink = permalinkTools.decodePermalink(location.hash,this.debug);
 
     if (this.debug) {
       console.log('[photon-query] connectedCallback - decodedPermalink', decodedPermalink);
@@ -186,7 +186,8 @@ class PhotonQuery extends LitElement {
       console.debug('[photon-query] _onExec', {backend, warpscript});
     }
     let date = new Date();    
-    historyHelper.push({backend, warpscript, date})
+    historyHelper.push({backend, warpscript, date});
+    location.hash = permalinkTools.generatePermalink(warpscript,backend,this.debug);
   }
 
 

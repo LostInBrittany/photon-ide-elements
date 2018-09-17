@@ -321,9 +321,9 @@ class PhotonQueryEditor extends LitElement {
       <div class="row">
         <p>
           Permalink:
-          <a href="#/permalink${permalinkTools.generatePermalink(this.warpscript, this.backend)}">
-            #/permalink${permalinkTools.cropPermalink(
-              permalinkTools.generatePermalink(this.warpscript, this.backend), 50)}
+          <a href="#${permalinkTools.generatePermalink(this.warpscript, this.backend)}">
+            #${permalinkTools.cropPermalink(
+              permalinkTools.generatePermalink(this.warpscript, this.backend), 60)}
           </a>
         </p>
       </div>

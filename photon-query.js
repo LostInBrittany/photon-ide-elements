@@ -4,6 +4,8 @@ import '@granite-elements/granite-yaml/granite-yaml-remote-parser';
 
 import shortcuts from '@lostinbrittany/shortcuts';
 
+import '@material/mwc-icon';
+
 import photonSharedStyles from './photon-shared-styles';
 
 import historyHelper from './photon-history/photon-history-helper';
@@ -34,7 +36,7 @@ class PhotonQuery extends LitElement {
           debug$="${debug}"
           auto ></granite-yaml-remote-parser>
 
-      <div class="row flex-end ">
+      <div class="row align-items-center flex-end ">
         <photon-backend-info 
             backend='${backend}' 
             conf='${conf}' 
@@ -48,7 +50,12 @@ class PhotonQuery extends LitElement {
             on-keydown="${(evt) => evt.stopPropagation()}"
             on-keyup="${(evt) => evt.stopPropagation()}"
             debug='${debug}'></photon-backend-info>
+        
+        <mwc-icon class="help"
+            on-click="${()=>this._help()}">help</mwc-icon>
       </div>
+
+
 
       <photon-hotkeys
           on-execute='${() => this.queryEditor.execute()}'
@@ -191,7 +198,9 @@ class PhotonQuery extends LitElement {
   }
 
 
-
+  _help() {
+      this._root.querySelector('photon-hotkeys')._hotkeysHelp = true;
+  }
   
 
 
@@ -275,6 +284,17 @@ class PhotonQuery extends LitElement {
       photon-response-inspector {
         width: 100%;
       }
+      mwc-icon.help {
+          background-color: transparent;
+          color: var(--app-primary-color);
+          padding: inherit;
+          border-radius: inherit;
+          margin-bottom: 0;
+          cursor: pointer;
+          font-weight: inherit;
+          --mdc-icon-size: 24px;
+          margin-left: 16px;
+          }
     </style>
     `;
   }

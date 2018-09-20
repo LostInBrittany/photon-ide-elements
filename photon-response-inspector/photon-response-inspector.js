@@ -1,12 +1,12 @@
 import { LitElement, html } from '@polymer/lit-element';
 
 import { createStyles } from '@granite-elements/granite-inspector/styles/createStyles';
-import createIterator from '@granite-elements/granite-inspector/tools/createIterator';
 import '@granite-elements/granite-inspector/tree-view/granite-inspector-tree-view';
 
 import photonSharedStyles from '../photon-shared-styles.js';
 
 import defaultNodeRenderer from './photon-node-renderer';
+import createIterator from './photon-create-iterator';
 
 const photonTheme = {
   BASE_FONT_FAMILY: 'monospace',

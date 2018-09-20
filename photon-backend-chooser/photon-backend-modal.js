@@ -42,26 +42,26 @@ let modalStyles = html`
 `;
 
 class PhotonBackendModal extends LitElement {
-  _render({backend, conf, open, debug}) {
+  render() {
     return html`
            ${photonSharedStyles} ${modalStyles}
           <div 
-              class$="${open?'modal open':'modal'}"
-              on-click="${(evt) => this._closeModal(evt)}">
+              class="${this.open?'modal open':'modal'}"
+              @click="${(evt) => this._closeModal(evt)}">
             <div class='modal-content'
-              on-click="${(evt) => {
+              @click="${(evt) => {
                 evt.stopPropagation();
               }}">
               <div 
                   class='modal-close'
-                  on-click="${(evt) => this._closeModal(evt)}">
+                  @click="${(evt) => this._closeModal(evt)}">
                 <mwc-icon 
                   class="modalCloseIcon">close</mwc-icon>
               </div>
               <photon-backend-picker
-                  backend='${backend}' 
-                  conf='${conf}'
-                  debug?='${debug}'></photon-backend-picker>
+                  .backend="${this.backend}"
+                  .conf="${this.conf}"
+                  ?debug="${this.debug}"></photon-backend-picker>
             </div>
           </div>
         `;
@@ -69,10 +69,10 @@ class PhotonBackendModal extends LitElement {
 
   static get properties() {
     return {
-      backend: Object,
-      conf: Object,
-      open: Boolean,
-      debug: Boolean,
+      backend: {type: Object},
+      conf: {type: Object},
+      open: {type: Boolean},
+      debug: {type: Boolean},
     };
   }
 

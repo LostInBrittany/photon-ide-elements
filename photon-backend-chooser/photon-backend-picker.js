@@ -6,49 +6,48 @@ import '@material/mwc-icon';
 import '../photon-textfield/photon-textfield';
 
 class PhotonBackendPicker extends LitElement {
-  _render({backend, conf, customBackend, _customBackendChoosen, _savedBackends }) {
-    console.log('[photon-backend-picker] rendering', {backend, customBackend, _savedBackends });
-    if (!backend || !customBackend) {
+  render() {
+    if (!this.backend || !this.customBackend) {
       return;
     }
     return html`
       ${photonSharedStyles}
       ${this._renderStyle()}
 
-      ${ (_savedBackends && _savedBackends.length >0) ?
+      ${ (this._savedBackends && this._savedBackends.length >0) ?
         html`
           <h3>Your backends</h3>
-          ${_savedBackends.map((item, index) => html`
+          ${this._savedBackends.map((item, index) => html`
             <div class='flex align-items-center'>
               <mwc-radio 
                   id$='backend_${item.id}'
                   value='backend_${item.id}'
                   name='backendRadioGroup' 
-                  checked?='${this._equalBackends(backend, item)}'
-                  on-click='${()=>this._onBackendChosen(item)}'></mwc-radio>        
+                  checked?='${this._equalBackends(this.backend, item)}'
+                  @click='${()=>this._onBackendChosen(item)}'></mwc-radio>        
               <div class='backendRadioGroupItem'>
                 <div class="backend_label">${item.label}</div>
                 <div class="backend_url">${item.url}${item.execEndpoint}</div>
               </div>
               <mwc-icon 
                 class="deleteBackendBtn"
-                on-click="${()=>this.deleteBackend(index)}">delete</mwc-icon>
+                @click="${()=>this.deleteBackend(index)}">delete</mwc-icon>
             </div>
           `)}
         `:''
       }
 
-      ${ (conf && conf.backends && conf.backends.length > 0) ?
+      ${ (this.conf && this.conf.backends && this.conf.backends.length > 0) ?
         html`
           <h3>Default backends</h3>
-          ${conf.backends.map((item) => html`
+          ${this.conf.backends.map((item) => html`
             <div class='flex align-items-center'>
               <mwc-radio 
                   id$='backend_${item.id}'
                   value='backend_${item.id}'
                   name='backendRadioGroup' 
-                  checked?='${this._equalBackends(backend, item)}'
-                  on-click='${()=>this._onBackendChosen(item)}'></mwc-radio>        
+                  checked?='${this._equalBackends(this.backend, item)}'
+                  @click='${()=>this._onBackendChosen(item)}'></mwc-radio>        
               <div class='backendRadioGroupItem'>
                 <div class="backend_label">${item.label}</div>
                 <div class="backend_url">${item.url}${item.execEndpoint}</div>
@@ -65,53 +64,53 @@ class PhotonBackendPicker extends LitElement {
             value='custom_backend'
             name='backendRadioGroup' 
             checked?='${this._isCustomBackend()}'
-            on-click='${()=>this._onCustomBackendChosen()}'></mwc-radio>         
+            @click='${()=>this._onCustomBackendChosen()}'></mwc-radio>         
         <div class='backendRadioGroupItem'>   
           <div class='flex align-items-center'>
             <photon-textfield 
                 class="custom-backend-url" 
                 label="Backend URL" 
-                on-change="${(evt) => {
-                  let _backend = { ...customBackend, url: evt.detail, id: '' };
+                @change="${(evt) => {
+                  let _backend = { ...this.customBackend, url: evt.detail, id: '' };
                   this.customBackend = _backend;
                   this.backend = _backend;
                   if (this.debug) {
                     console.log('[photon-backend-picker] URL changed', this.backend, evt.detail);
                   }
                 }}"
-                value="${customBackend.url}"></photon-textfield>
+                value="${this.customBackend.url}"></photon-textfield>
             <photon-textfield 
                 class="custom-backend-execEndpoint" 
                 label="Exec endpoint" 
-                on-change="${(evt) => {
-                  let _backend = { ...customBackend, execEndpoint: evt.detail, id: '' };
+                @change="${(evt) => {
+                  let _backend = { ...this.customBackend, execEndpoint: evt.detail, id: '' };
                   this.customBackend = _backend;
                   this.backend= _backend;
                   if (this.debug) {
                     console.log('[photon-backend-picker] Exec endpoint changed', this.backend, evt.detail);
                   }
                 }}"
-                value="${customBackend.execEndpoint}"></photon-textfield>
+                value="${this.customBackend.execEndpoint}"></photon-textfield>
           </div>
           <div class='flex align-items-center'>
             <photon-textfield 
                 class="custom-backend-label" 
                 label="Label" 
-                on-change="${(evt) => {
-                  let _backend = { ...customBackend, label: evt.detail, id: '' };
+                @change="${(evt) => {
+                  let _backend = { ...this.customBackend, label: evt.detail, id: '' };
                   this.customBackend = _backend;
                   this.backend = _backend;
                   if (this.debug) {
                     console.log('[photon-backend-picker] Label changed', this.backend, evt.detail);
                   }
                 }}"
-                value="${customBackend.label}"></photon-textfield>
+                value="${this.customBackend.label}"></photon-textfield>
           </div>
         </div>
-        ${(_customBackendChoosen || this._isCustomBackend()) ? html`
+        ${(this._customBackendChoosen || this._isCustomBackend()) ? html`
           <mwc-icon 
             class="saveBackendBtn"
-            on-click="${()=>this.saveBackend()}">save</mwc-icon>`:''}
+            @click="${()=>this.saveBackend()}">save</mwc-icon>`:''}
       </div>
     `;
   }
@@ -144,18 +143,18 @@ class PhotonBackendPicker extends LitElement {
        *
        *  @type Backend
        */
-      backend: Object,
+      backend: {type: Object},
       /**
        * An array of pre-configured backends
        */
-      conf: Object,
+      conf: {type: Object},
       /**
        * If true, it logs to the console
        */
-      debug: Boolean,
-      customBackend: Object,
-      _customBackendChoosen: Boolean,
-      _savedBackends: Array,
+      debug: {type: Boolean},
+      customBackend: {type: Object},
+      _customBackendChoosen: {type: Boolean},
+      _savedBackends: {type: Array},
     };
   }
 

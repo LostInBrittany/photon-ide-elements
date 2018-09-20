@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {ComponentElement, html} from '@material/mwc-base/component-element.js';
-import {classString as c$} from '@polymer/lit-element';
+import {classMap as c$} from 'lit-html/directives/classMap';
 import {MDCWebComponentMixin} from '@material/mwc-base/mdc-web-component.js';
 import {MDCTextField} from '@material/textfield';
 import {style} from './photon-textfield-css.js';

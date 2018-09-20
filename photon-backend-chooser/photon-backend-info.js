@@ -7,8 +7,8 @@ import '@material/mwc-icon';
 
 
 class PhotonBackendInfo extends LitElement {
-  _render({backend, conf, showBackendChooser, debug}) {
-    if (!backend) {
+  render() {
+    if (!this.backend) {
       return '';
     }
     return html`
@@ -39,29 +39,29 @@ class PhotonBackendInfo extends LitElement {
           }
       </style>
       <photon-backend-modal  
-          backend='${backend}' 
-          conf='${conf}'
-          debug?='${debug}'
-          open?='${showBackendChooser}'
-          on-close='${() => this.showBackendChooser = false}'></photon-backend-modal>
+          .backend='${this.backend}' 
+          .conf='${this.conf}'
+          ?debug='${this.debug}'
+          ?open='${this.showBackendChooser}'
+          @close='${() => this.showBackendChooser = false}'></photon-backend-modal>
       <div class="flex align-items-center">
         <div class="column">
-          <div class="currentBackendLabel">Backend: ${backend.label}</div>
-          <div class="currentBackendValue">${backend.url}${backend.execEndpoint}</div>
+          <div class="currentBackendLabel">Backend: ${this.backend.label}</div>
+          <div class="currentBackendValue">${this.backend.url}${this.backend.execEndpoint}</div>
         </div> 
         <mwc-icon 
             class="editBackendBtn"
-            on-click="${()=>this.editBackend()}">settings</mwc-icon>
+            @click="${()=>this.editBackend()}">settings</mwc-icon>
       </div>
     `;
   }
 
   static get properties() {
     return {
-      backend: Object,
-      conf: Object,
-      showBackendChooser: Boolean,
-      debug: Boolean,
+      backend: {type: Object},
+      conf: {type: Object},
+      showBackendChooser: {type: Boolean},
+      debug: {type: Boolean},
     };
   }
 

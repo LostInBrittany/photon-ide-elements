@@ -8,8 +8,8 @@ import shortcuts from '@lostinbrittany/shortcuts';
 class PhotonHotkeys extends LitElement {
   static get properties() {
     return {
-      _hotkeysRegexp: Boolean,
-      _hotkeysHelp: Boolean,
+      _hotkeysRegexp: {type: Boolean},
+      _hotkeysHelp: {type: Boolean},
     };
   }
 
@@ -93,23 +93,23 @@ class PhotonHotkeys extends LitElement {
     setTimeout(() => this._pressedHotkeys[hotkey] = false, 2000);
   }
 
-  _render( {_hotkeysHelp, _hotkeysRegexp}) {
-    if (_hotkeysHelp) {
+  render() {
+    if (this._hotkeysHelp) {
       return html`
         <photon-hotkeys-help
             id="hotkeyHelp"
-            on-close='${() => this._hotkeysHelp = false }'></photon-hotkeys-help>
+            @close='${() => this._hotkeysHelp = false }'></photon-hotkeys-help>
       `;
     }
-    if (_hotkeysRegexp) {
+    if (this._hotkeysRegexp) {
       return html`
         <photon-hotkeys-regexp
             id="hotkeyRegexp"
-            on-keypress="${(evt) => evt.stopPropagation()}"
-            on-keydown="${(evt) => evt.stopPropagation()}"
-            on-keyup="${(evt) => evt.stopPropagation()}"
-            on-regexp='${(evt) => console.log('[REGEXP]', evt.detail)}'
-            on-close='${() => this._hotkeysRegexp = false }'></photon-hotkeys-regexp>
+            @keypress="${(evt) => evt.stopPropagation()}"
+            @keydown="${(evt) => evt.stopPropagation()}"
+            @keyup="${(evt) => evt.stopPropagation()}"
+            @regexp='${(evt) => console.log('[REGEXP]', evt.detail)}'
+            @close='${() => this._hotkeysRegexp = false }'></photon-hotkeys-regexp>
       `;
     }
     return html``;

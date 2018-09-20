@@ -60,7 +60,7 @@ class PhotonResponseInspector extends LitElement {
    * @overrides
    * @return {Object} this
    */
-  _createRoot() {
+  createRenderRoot() {
     return this;
   }
 

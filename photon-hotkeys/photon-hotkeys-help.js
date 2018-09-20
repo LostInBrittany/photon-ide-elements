@@ -52,19 +52,19 @@ let modalStyles = html`
 `;
 
 class PhotonHotkeyHelp extends LitElement {
-  _render() {
+  render() {
     return html`
       ${photonSharedStyles} ${modalStyles}
       <div 
-          class$="${open?'modal open':'modal'}"
-          on-click="${(evt) => this._closeModal(evt)}">
+          class="${this.open?'modal open':'modal'}"
+          @click="${(evt) => this._closeModal(evt)}">
         <div class='modal-content'
-          on-click="${(evt) => {
+          @click="${(evt) => {
             evt.stopPropagation();
           }}">
           <div 
               class='modal-close'
-              on-click="${(evt) => this._closeModal(evt)}">
+              @click="${(evt) => this._closeModal(evt)}">
             <mwc-icon 
               class="modalCloseIcon">close</mwc-icon>
           </div>
@@ -112,6 +112,7 @@ class PhotonHotkeyHelp extends LitElement {
 
   static get properties() {
     return {
+      open: {type: Boolean},
     };
   }
 

@@ -79,15 +79,15 @@ class PhotonHotkeyRegexp extends LitElement {
     return html`
       ${photonSharedStyles} ${modalStyles}
       <div 
-          class$="${open?'modal open':'modal'}"
-          on-click="${(evt) => this._closeModal(evt)}">
+          class="${this.open?'modal open':'modal'}"
+          @click="${(evt) => this._closeModal(evt)}">
         <div class='modal-content'
-          on-click="${(evt) => {
+          @click="${(evt) => {
             evt.stopPropagation();
           }}">
           <div 
               class='modal-close'
-              on-click="${(evt) => this._closeModal(evt)}">
+              @click="${(evt) => this._closeModal(evt)}">
             <mwc-icon 
               class="modalCloseIcon">close</mwc-icon>
           </div>
@@ -95,11 +95,11 @@ class PhotonHotkeyRegexp extends LitElement {
           <photon-textfield 
               id="regexp"
               class="regexp-field" 
-              on-change="${(evt) => this._regexp = evt.detail }"
+              @change="${(evt) => this._regexp = evt.detail }"
               label="RegExp"></photon-textfield>
           <mwc-button 
               icon="send" 
-              on-click="${(evt) => this._select(evt)}"
+              @click="${(evt) => this._select(evt)}"
               raised>Select</mwc-button>
         </div>
       </div>
@@ -108,6 +108,7 @@ class PhotonHotkeyRegexp extends LitElement {
 
   static get properties() {
     return {
+      open: {type: Boolean},
     };
   }
 

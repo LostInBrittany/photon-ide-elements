@@ -9,12 +9,12 @@ class PhotonTimeseriesRenderer extends LitElement {
    * @overrides
    * @return {Object} this
    */
-  _createRoot() {
+  createRenderRoot() {
     return this;
   }
 
-  _render({ts, path}) {
-    if (!ts) {
+  render() {
+    if (!this.ts) {
       return;
     }
     return html`
@@ -34,7 +34,7 @@ class PhotonTimeseriesRenderer extends LitElement {
         }
       </style>
       <span class="serializedTimeseries">
-        ${timeseriesTools.serializeTimeseriesMetadata(ts, 5)}
+        ${timeseriesTools.serializeTimeseriesMetadata(this.ts, 5)}
         <mwc-icon
             on-click='${(evt) => this.firePlotTsEvent(evt)}'>timeline</mwc-icon>
       </span>
@@ -50,15 +50,16 @@ class PhotonTimeseriesRenderer extends LitElement {
   }
   static get properties() {
     return {
-      ts: Object,
-      path: String,
+      ts: {type: Object},
+      path: {type: String},
     };
   }
 
   firePlotTsEvent(evt) {
     console.log('Fire plot-ts', timeseriesTools.serializeTimeseriesMetadata(this.ts, 5), this.path);
     evt.stopPropagation();
-    this.dispatchEvent(new CustomEvent('plot-ts', {detail: {ts: this.ts, path: this.path}, bubbles: true, composed: true}));
+    this.dispatchEvent(new CustomEvent('plot-ts', 
+        {detail: {ts: this.ts, path: this.path}, bubbles: true, composed: true}));
   }
 }
 

@@ -314,14 +314,29 @@ class PhotonQueryEditor extends LitElement {
   // ***************************************************************************
 
   _renderResponse() {
+    if (this.debug) {
+      console.log('[photon-query-editor] _renderResponse', this.response, typeof this.response);
+      console.dir(this.response)
+    }
     return html`
-      ${this._renderResponseMetadata()}
-      ${this._renderResponseData()}
+      ${this._renderResponsePermalink()}
+
+      ${ 
+        (typeof this.response === 'object' &&  this.response !== null && this.response.options) 
+        ? this._renderResponseMetadata()
+        : ''
+      }
+      ${ 
+        (typeof this.response === 'object' &&  this.response !== null 
+            && this.response.stack && Array.isArray(this.response.stack))
+        ? this._renderResponseData()
+        : ''
+      }
       ${this._renderError()}
     `;
   }
 
-  _renderResponseMetadata() {
+  _renderResponsePermalink() {
     return html`
       <div class="row">
         <p>
@@ -332,6 +347,10 @@ class PhotonQueryEditor extends LitElement {
           </a>
         </p>
       </div>
+    `;
+  }
+  _renderResponseMetadata() {
+    return html`
       <div class="row flex-end">
           Your last script execution took ${this._formatElapsedTime(this.response.options.elapsed)} serverside, 
           fetched ${this.response.options.fetched} datapoints and performed 
@@ -365,10 +384,20 @@ class PhotonQueryEditor extends LitElement {
   _renderError() {
     if (this.response.errorLine || this.response.errorMsg) {
       return html `
-        <granite-alert level="danger">        
-          ERROR ${this.response.errorLine ? `line #${this.response.errorLine}` : ''} ${this.response.errorMsg}
+        <granite-alert level="danger">       
+          <p>ERROR</p>
+    <p> ${this.response.errorLine ? `line #${this.response.errorLine}` : ''} ${this.response.errorMsg}</p>
         </granite-alert>
       `;
+    }
+    if (typeof this.response !== 'object' || this.response === null 
+        || !this.response.stack || !Array.isArray(this.response.stack)) {
+          return html `
+            <granite-alert level="danger">        
+              <p>ERROR</p>
+              <p>${this.response}</p>
+            </granite-alert>
+          `;
     }
   }
   _renderSlot() {

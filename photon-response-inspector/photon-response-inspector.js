@@ -76,7 +76,10 @@ class PhotonResponseInspector extends LitElement {
   }
 
 
-  _render({ stack, nodeRenderer }) {
+  _render({ stack, nodeRenderer, debug }) {
+    if (debug) {
+      console.log('[photon-response-inspector] _render begin');
+    }
     let iterator = createIterator(true);
     return html`
       ${photonSharedStyles}
@@ -129,6 +132,7 @@ class PhotonResponseInspector extends LitElement {
       stack: Array,
       plottedPaths: Array,
       nodeRenderer: Function,
+      debug: Boolean,
     };
   }
 
@@ -143,7 +147,9 @@ class PhotonResponseInspector extends LitElement {
       this.plottedPaths[index].splice(this.plottedPaths[index].indexOf(detail.path), 1);
     }
     this.dispatchEvent(new CustomEvent('plotted-changed', { detail: this.plottedPaths }));
-    console.log('[photon-response-inspector] _onPlotTs', this.plottedPaths);
+    if (this.debug) {
+      console.log('[photon-response-inspector] _onPlotTs', this.plottedPaths);
+    }
   }
 
   _renderElementStyles() {

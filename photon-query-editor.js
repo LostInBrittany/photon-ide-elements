@@ -203,6 +203,9 @@ class PhotonQueryEditor extends LitElement {
       Object.entries(this._plottedPaths).forEach((kv) => plottedPaths[kv[0]] = []);
       this._plottedPaths= plottedPaths;
     }
+    if (this.debug) {
+      console.log('[photon-query-editor] _handleResponse done');
+    }
   }
 
   _handleError(error) {

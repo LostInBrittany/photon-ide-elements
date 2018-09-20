@@ -126,18 +126,17 @@ class PhotonQueryEditor extends LitElement {
     };
     this.removeAttribute('cloak');
 
-    this._setHotkeys()
+    this._setHotkeys();
   }
 
   _setHotkeys() {
     this._pressedHotkeys = {};
 
-    // Execute
-    shortcuts.add('ctrl+e', (evt) => {
-        this.hotkeyHandlerWrapper(evt, 'execute', () => this.execute());
-      },
-      this.$.editor
-    );
+    this.$.editor.editor.commands.addCommand({
+      name: "execWarpscript",
+      bindKey: {win: "Ctrl-e", mac: "Ctrl-e"},
+      exec: () => this.execute(),      
+    });
   }
 
   hotkeyHandlerWrapper(evt, hotkey, callback) {

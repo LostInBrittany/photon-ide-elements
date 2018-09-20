@@ -251,6 +251,7 @@ class PhotonQueryEditor extends LitElement {
           if (timeseriesTools.isTimeseries(val)) {
             return acc.concat(`${path}.${index}`)
           }
+          return acc;
         }, []);
       }
       if (timeseriesTools.isTimeseries(element)) {

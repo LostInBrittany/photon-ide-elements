@@ -161,10 +161,14 @@ class PhotonResponsePlot extends LitElement {
           fit: true,
           multiline: true,
           format: (x) => {
-            if (!this.timestamps) {
-              return x.toISOString().replace('T', ' ').replace(/\.[0-9]+Z/, '');
+            try {
+              if (!this.timestamps) {
+                return x.toISOString().replace('T', ' ').replace(/\.[0-9]+Z/, '');
+              }
+              return x.getTime();
+            } catch (err) {
+              return '';
             }
-            return x.getTime();
           },
         },
       },

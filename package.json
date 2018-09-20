@@ -4,25 +4,25 @@
   "description": "Some high level elements to build the Photon IDE for Warp 10",
   "main": "photon-elements.js",
   "dependencies": {
-    "@granite-elements/ace-widget": "^2.2.5",
-    "@granite-elements/granite-alert": "^2.0.3",
-    "@granite-elements/granite-c3": "^3.1.6",
+    "@granite-elements/ace-widget": "^2.2.6",
+    "@granite-elements/granite-alert": "2.0.3",
+    "@granite-elements/granite-c3": "^3.2.0",
     "@granite-elements/granite-inspector": "^1.2.0",
     "@granite-elements/granite-yaml": "^2.0.1",
     "@lostinbrittany/shortcuts": "^1.1.2",
     "@material/mwc-button": "^0.1.2",
     "@material/mwc-radio": "^0.1.2",
     "@material/mwc-switch": "^0.1.2",
-    "@material/textfield": "^0.38.0",
+    "@material/textfield": "^0.38.1",
     "@photon-elements/photon-iron": "^1.3.0",
     "@photon-elements/photon-tools": "^1.6.7",
-    "@polymer/lit-element": "^0.5.2",
-    "@polymer/polymer": "^3.0.0"
+    "@polymer/lit-element": "0.5.2",
+    "@polymer/polymer": "^3.0.5"
   },
   "devDependencies": {
-    "@polymer/iron-demo-helpers": "^3.0.0-pre.21",
+    "@polymer/iron-demo-helpers": "^3.0.2",
     "@webcomponents/webcomponentsjs": "^2.1.0",
     "wct-browser-legacy": "^1.0.0"
   },
-  "version": "1.0.27"
+  "version": "1.0.28"
 }

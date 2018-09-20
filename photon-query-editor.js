@@ -51,7 +51,7 @@ class PhotonQueryEditor extends LitElement {
         </ace-widget>   
       </div>
       <div class='row flex-end'>
-        <mwc-button icon="send" 
+        <mwc-button id='execButton' icon="send" 
             on-click="${(evt) => this.execute()}"
             raised>Execute</mwc-button>
       </div>
@@ -169,6 +169,7 @@ class PhotonQueryEditor extends LitElement {
     if (this.debug) {
       console.debug('[photon-query-editor] Execute', this.warpscript);
     }
+    this._root.querySelector('#execButton').blur();
     this.dispatchEvent(new CustomEvent('exec', {
       detail: {
         warpscript: this.warpscript,
@@ -176,7 +177,7 @@ class PhotonQueryEditor extends LitElement {
       },
       bubbles: true,
       composed: true,
-    }));
+    }));    
     PhotonWarpscriptExec
       .exec(`${this.backend.url}${this.backend.execEndpoint}`, this.warpscript)
       .then((response) => this._handleResponse(response))

@@ -16,29 +16,33 @@ class PhotonResponseInspectorObjectLabel extends LitElement {
     return this;
   }
 
-  _render({name, data, path, isNonEnumerable}) {
+  render() {
     return html`
       <granite-inspector-object-name 
-          name=${name} 
-          dimmed=${isNonEnumerable}></granite-inspector-object-name>
+          .name=${this.name} 
+          .dimmed=${this.isNonEnumerable}></granite-inspector-object-name>
       <span>:&nbsp;</span>
-      ${timeseriesTools.isTimeseries(data) ?
+      ${timeseriesTools.isTimeseries(this.data) ?
         html`
           <span class='objectValueObject'><span class="serializedTimeseries">
-            <photon-timeseries-renderer ts=${data} path=${path}></photon-timeseries-renderer>
+            <photon-timeseries-renderer 
+                .ts=${this.data} 
+                .path=$this.path}></photon-timeseries-renderer>
           </span>`
         :
-        html`<granite-inspector-object-value data=${data}></granite-inspector-object-value>`
+        html`
+          <granite-inspector-object-value 
+              .data=${this.data}></granite-inspector-object-value>`
       }
     `;
   }
 
   static get properties() {
     return {
-      data: Object,
-      name: String,
-      path: String,
-      isNonEnumerable: Boolean,
+      data: {type: Object},
+      name: {type: String},
+      path: {type: String},
+      isNonEnumerable: {type: Boolean},
     };
   }
 }

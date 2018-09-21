@@ -14,31 +14,35 @@ class PhotonResponseInspectorObjectRootLabel extends LitElement {
     return this;
   }
 
-  _render({name, data, path, expanded}) {
+  render() {
     if (typeof name === 'string') {
       return html`
         <span>
           <granite-inspector-object-name 
-              name=${name}></granite-inspector-object-name>
+              .name=${this.name}></granite-inspector-object-name>
           <span>:&nbsp;</span>
           <photon-response-inspector-object-preview 
-              data=${data} path=${path} expanded?=${expanded}></photon-response-inspector-object-preview>
+              .data=${this.data} 
+              .path=${this.path} 
+              ?expanded=${this.expanded}></photon-response-inspector-object-preview>
         </span>
       `;
     } else {
       return html`
         <photon-response-inspector-object-preview 
-            data=${data} path=${path} expanded?=${expanded}></photon-response-inspector-object-preview>
+            .data=${this.data} 
+            .path=${this.path} 
+            ?expanded=${this.expanded}></photon-response-inspector-object-preview>
       `;
     }
   }
 
   static get properties() {
     return {
-      data: Object,
-      name: String,
-      path: String,
-      expanded: Boolean,
+      data: {type: Object},
+      name: {type: String},
+      path: {type: String},
+      expanded: {type: Boolean},
     };
   }
 }

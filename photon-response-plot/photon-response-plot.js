@@ -5,8 +5,8 @@ import '@granite-elements/granite-c3/granite-c3';
 import '../photon-switch/photon-switch';
 
 class PhotonResponsePlot extends LitElement {
-  _render({ stack, plottedPaths, timestamps, debug }) {
-    if (!stack || !plottedPaths ) {
+  render() {
+    if (!this.stack || !this.plottedPaths ) {
       return ``;
     }
     return html`
@@ -16,37 +16,11 @@ class PhotonResponsePlot extends LitElement {
         <div class="row flex justify-center">
           <div class="horizontal-flex-item">Dates</div> 
           <photon-switch 
-              checked="${timestamps}" 
+              checked="${this.timestamps}" 
               on-change="${(evt) => this._onTimestampsChange(evt)}"
               class="horizontal-flex-item"></photon-switch> 
           <div class="horizontal-flex-item">Timestamps</div>           
         </div>
-        <!--
-        ${Object.entries(this._dataFromPlottedTs()).map((tsByLevel) => html`
-          ${tsByLevel[1].length >0 ?
-            html`
-              <div class="flex">
-                <div class="key">
-                  Stack level ${tsByLevel[0]}
-                </div>
-                <div>
-                  <ul>
-                      ${tsByLevel[1].map((ts) => {
-                        return html`
-                          <li>
-                            ${timeseriesTools.serializeTimeseriesMetadata(ts)}
-                          </li>
-                        `;
-                      })}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            ` :
-            ''
-          }
-        `)}
-        -->
     `;
   }
 
@@ -62,19 +36,19 @@ class PhotonResponsePlot extends LitElement {
       /**
        * {Array<ts>} A list of timeseries to plot
        */
-      plottedPaths: Array,
+      plottedPaths: {type: Array},
       /**
        * {Array<any>} A Warp 10 return stack
        */
-      stack: Array,
+      stack: {type: Array},
       /**
        * Boolean If true, display timestamps instead of dates
        */
-      timestamps: Boolean,
+      timestamps: {type: Boolean},
       /**
        * Boolean If true, log to the console
        */
-      debug: Boolean,
+      debug: {type: Boolean},
     };
   }
 

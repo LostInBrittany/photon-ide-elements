@@ -28,18 +28,18 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
     return this;
   }
 
-  _render({ data, path, expanded }) {
+  render() {
     return html`
-      ${this.markup(data, path, expanded)}
+      ${this.markup(this.data, this.path, this.expanded)}
     `;
   }
 
   static get properties() {
     return {
-      data: Object,
-      path: String,
-      maxProperties: Number,
-      expanded: Boolean,
+      data: {type: Object},
+      path: {type: String},
+      maxProperties: {type: Number},
+      expanded: {type: Boolean},
     };
   }
 
@@ -54,7 +54,10 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
         this.data === null ||
         this.data instanceof Date ||
         this.data instanceof RegExp) {
-      return html`<granite-inspector-object-value data=${this.data}></granite-inspector-object-value>`;
+      return html`
+        <granite-inspector-object-value 
+            .data=${this.data}></granite-inspector-object-value>
+      `;
     }
 
     if (this.data instanceof Array) {
@@ -71,11 +74,14 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
                 this.data.map((element, i) => {
                   if (timeseriesTools.isTimeseries(element)) {
                     return html`                  
-                      <photon-timeseries-renderer ts=${element} path='${this.path}.${i}'></photon-timeseries-renderer>                    
+                      <photon-timeseries-renderer 
+                          .ts=${element} 
+                          .path='${this.path}.${i}'></photon-timeseries-renderer>                    
                       ${i<this.data.length-1 ? html`<span>,&nbsp;</span>` : ``}`;
                   } else {
                     return html`
-                      <granite-inspector-object-value data=${element}></granite-inspector-object-value> 
+                      <granite-inspector-object-value 
+                          .data=${element}></granite-inspector-object-value> 
                       ${i<this.data.length-1 ? html`<span>,&nbsp;</span>` : ``}
                     `;
                   }
@@ -87,9 +93,15 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
         </span>
       `;
     } else if (typeof this.data === 'string') {
-      return html`<granite-inspector-object-value data='${this.data}' ></granite-inspector-object-value>`;
+      return html`
+        <granite-inspector-object-value 
+            .data='${this.data}' ></granite-inspector-object-value>
+      `;
     } else if (timeseriesTools.isTimeseries(this.data)) {
-        return html`<photon-timeseries-renderer ts=${this.data} path=${this.path}></photon-timeseries-renderer> `;
+        return html`
+          <photon-timeseries-renderer 
+              .ts=${this.data} 
+              .path=${this.path}></photon-timeseries-renderer> `;
     } else {
       let propertyNodes = [];
       for (let propertyName in this.data) {
@@ -103,18 +115,21 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
           if (timeseriesTools.isTimeseries(propertyValue)) {
             propertyNodes.push(html`
             <span>
-              <granite-inspector-object-name name=${propertyName}></granite-inspector-object-name>:&nbsp;
+              <granite-inspector-object-name 
+                  .name=${propertyName}></granite-inspector-object-name>:&nbsp;
               <photon-timeseries-renderer 
-                  ts=${propertyValue} 
-                  path='${this.path}.${propertyName}'></photon-timeseries-renderer>
+                  .ts=${propertyValue} 
+                  .path='${this.path}.${propertyName}'></photon-timeseries-renderer>
               ${ellipsis}
             </span>`);
           } else {
             propertyNodes.push(html`
             <span>
-              <granite-inspector-object-name name=${propertyName}></granite-inspector-object-name>
+              <granite-inspector-object-name 
+                  .name=${propertyName}></granite-inspector-object-name>
               <span>:&nbsp;</span>
-              <granite-inspector-object-value data=${propertyValue}></granite-inspector-object-value>
+              <granite-inspector-object-value 
+                  .data=${propertyValue}></granite-inspector-object-value>
               ${ellipsis}
             </span>`);
           }

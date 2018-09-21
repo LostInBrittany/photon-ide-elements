@@ -21,8 +21,8 @@ import { afterNextRender } from '@material/mwc-base/utils.js';
 export class Switch extends LitElement {
   static get properties() {
     return {
-      checked: Boolean,
-      disabled: Boolean,
+      checked: {type: Boolean},
+      disabled: {type: Boolean},
     };
   }
 
@@ -36,12 +36,16 @@ export class Switch extends LitElement {
     return style;
   }
 
-  _render({ checked, disabled }) {
+  render() {
     return html`
        ${this._renderStyle()}
       <div class="mdc-switch">
-        <input type="checkbox" id="basic-switch" on-change="${() => this.onChange()}" checked="${checked}" disabled?="${disabled}"
-          class="mdc-switch__native-control" />
+        <input 
+            type="checkbox" id="basic-switch" 
+            @change="${() => this.onChange()}" 
+            ?checked=${this.checked} 
+            ?disabled?=${this.disabled}
+            class="mdc-switch__native-control" />
         <div class="mdc-switch__background">
           <div class="mdc-switch__knob"></div>
         </div>

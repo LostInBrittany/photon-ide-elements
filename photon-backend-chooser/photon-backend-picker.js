@@ -115,7 +115,7 @@ class PhotonBackendPicker extends LitElement {
     `;
   }
 
-  _didRender(props, changedProps, prevProps) {
+  updated(props, changedProps, prevProps) {
     if (changedProps.backend !== undefined) {
       if (this.debug) {
         console.log('[photon-backend-picker] _didRender - backend changed', changedProps.backend);
@@ -193,7 +193,7 @@ class PhotonBackendPicker extends LitElement {
   }
 
   async _delayedFireEvent(evt) {
-    await this.renderComplete;
+    await this.updateComplete;
     this.dispatchEvent(evt);
   }
 

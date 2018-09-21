@@ -64,7 +64,7 @@ class PhotonResponseInspector extends LitElement {
     return this;
   }
 
-  _shouldRender(props, changedProps, prevProps) {
+  shouldUpdate(props, changedProps, prevProps) {
     if (this.stack) {
       this.stack.forEach((item, index) => {
         if (!this.plottedPaths[index]) {
@@ -76,8 +76,8 @@ class PhotonResponseInspector extends LitElement {
   }
 
 
-  _render({ stack, nodeRenderer, debug }) {
-    if (debug) {
+  render() {
+    if (this.debug) {
       console.log('[photon-response-inspector] _render begin');
     }
     let iterator = createIterator(true);
@@ -88,8 +88,8 @@ class PhotonResponseInspector extends LitElement {
         ${this.styles}
       </style>
     <div class="response-panel">
-      ${stack !== undefined ?
-        stack.map((line, index) => {
+      ${this.stack !== undefined ?
+        this.stack.map((line, index) => {
           return html`
             <div class="line">
               <div class="line-number">${index}:</div>
@@ -102,7 +102,7 @@ class PhotonResponseInspector extends LitElement {
                       expandLevel=0
                       expandPath=''
                       sortObjectKeys='true'
-                      nodeRenderer=${nodeRenderer}
+                      this.nodeRenderer=${this.nodeRenderer}
                       dataIterator=${iterator}></granite-inspector-tree-view>
                 </div>
               </div>
@@ -129,10 +129,10 @@ class PhotonResponseInspector extends LitElement {
       /**
        * The Warp 10 response stack you would like to inspect
        */
-      stack: Array,
-      plottedPaths: Array,
-      nodeRenderer: Function,
-      debug: Boolean,
+      stack: {type: Array},
+      plottedPaths: {type: Array},
+      nodeRenderer: {type: Function},
+      debug: {type: Boolean},
     };
   }
 

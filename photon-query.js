@@ -71,9 +71,7 @@ class PhotonQuery extends LitElement {
           .warpscript=${this.warpscript}
           .debug=${this.debug}
           @exec='${(evt) => this._onExec(evt)}'
-          cloak
-          >
-      </photon-query-editor>
+          cloak></photon-query-editor>
     `;
   }
 

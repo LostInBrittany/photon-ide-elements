@@ -365,18 +365,18 @@ class PhotonQueryEditor extends LitElement {
 
       <div class="row">
         <photon-response-inspector 
-            stack=${this.response.stack}
-            plottedPaths=${this._plottedPaths}
-            on-plotted-changed='${(evt) => {
+            .stack=${this.response.stack}
+            .plottedPaths=${this._plottedPaths}
+            @plotted-changed='${(evt) => {
               this._plottedPaths = { ...evt.detail };
             }}'
-            debug="${this.debug}"></photon-response-inspector>    
+            .debug=${this.debug}></photon-response-inspector>    
       </div>
       <div class="row">
         <photon-response-plot 
-            stack=${this.response.stack}
-            plottedPaths=${this._plottedPaths}
-            debug="${this.debug}"></photon-response-plot>
+            .stack=${this.response.stack}
+            .plottedPaths=${this._plottedPaths}
+            .debug=${this.debug}></photon-response-plot>
       </div>
       `;
     }
@@ -386,7 +386,7 @@ class PhotonQueryEditor extends LitElement {
       return html `
         <granite-alert level="danger">       
           <p>ERROR</p>
-    <p> ${this.response.errorLine ? `line #${this.response.errorLine}` : ''} ${this.response.errorMsg}</p>
+          <p> ${this.response.errorLine ? `line #${this.response.errorLine}` : ''} ${this.response.errorMsg}</p>
         </granite-alert>
       `;
     }

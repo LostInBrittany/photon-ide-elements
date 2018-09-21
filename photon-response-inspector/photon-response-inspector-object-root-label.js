@@ -15,7 +15,8 @@ class PhotonResponseInspectorObjectRootLabel extends LitElement {
   }
 
   render() {
-    if (typeof name === 'string') {
+    console.log('[photon-response-inspector-object-root-label] render', this.data, typeof this.data);
+    if (typeof this.name === 'string' && this.length > 0) {
       return html`
         <span>
           <granite-inspector-object-name 

@@ -215,9 +215,9 @@ class PhotonResponsePlot extends LitElement {
     if (c3Data.columns && c3Data.columns.length >0) {
       return html`
         <granite-c3 
-            data=${c3Data} 
-            options=${this._chartConf()} 
-            debug></granite-c3>
+            .data=${c3Data} 
+            .options=${this._chartConf()} 
+            .debug=${this.debug}></granite-c3>
       `;
     }
   }

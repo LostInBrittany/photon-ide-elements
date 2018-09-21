@@ -36,7 +36,7 @@ class PhotonTimeseriesRenderer extends LitElement {
       <span class="serializedTimeseries">
         ${timeseriesTools.serializeTimeseriesMetadata(this.ts, 5)}
         <mwc-icon
-            on-click='${(evt) => this.firePlotTsEvent(evt)}'>timeline</mwc-icon>
+            @click='${(evt) => this.firePlotTsEvent(evt)}'>timeline</mwc-icon>
       </span>
     `;
   }

@@ -65,8 +65,14 @@ class PhotonResponseInspector extends LitElement {
   }
 
   shouldUpdate(props, changedProps, prevProps) {
+    if (this.debug) {
+      console.log('[photon-response-inspector] shouldUpdate', this.stack);
+    }
     if (this.stack) {
       this.stack.forEach((item, index) => {
+        if (!this.plottedPaths) {
+          this.plottedPaths = [];
+        }
         if (!this.plottedPaths[index]) {
           this.plottedPaths[index] = [];
         }
@@ -78,7 +84,7 @@ class PhotonResponseInspector extends LitElement {
 
   render() {
     if (this.debug) {
-      console.log('[photon-response-inspector] render begin', this.stack);
+      console.log('[photon-response-inspector] render begin', this.stack, this.stack[0]);
     }
     let iterator = createIterator(true);
     return html`
@@ -98,6 +104,7 @@ class PhotonResponseInspector extends LitElement {
                     class="line-content" 
                     @plot-ts='${(evt) => this._onPlotTs(evt.detail, index)}'>
                   <granite-inspector-tree-view
+                      name=''
                       .data=${line}
                       .expandLevel=0
                       .expandPath=${false}

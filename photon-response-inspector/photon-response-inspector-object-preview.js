@@ -29,6 +29,7 @@ class PhotonResponseInspectorObjectPreview extends LitElement {
   }
 
   render() {
+    console.log('[photon-response-inspector-object-preview] render', this.data, typeof this.data);
     return html`
       ${this.markup(this.data, this.path, this.expanded)}
     `;

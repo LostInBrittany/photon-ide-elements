@@ -22,8 +22,8 @@ import './photon-hotkeys/photon-hotkeys';
  * @customElement
  */
 class PhotonQuery extends LitElement {
-  _render({warpscript, backend, conf, confPath, response, debug}) {
-    console.log('rendering backend', backend)
+  render() {
+    console.log('rendering backend', this.backend)
     return html`
       ${photonSharedStyles}
       ${this._renderElementStyles()}
@@ -31,46 +31,46 @@ class PhotonQuery extends LitElement {
 
       <granite-yaml-remote-parser 
           id="conf-loader" 
-          url="${confPath}" 
-          on-yaml-parsed="${(evt) => this._confLoaded(evt.detail.obj) }}"
-          debug$="${debug}"
+          .url=${this.confPath} 
+          @yaml-parsed="${(evt) => this._confLoaded(evt.detail.obj) }}"
+          .debug=${this.debug}
           auto ></granite-yaml-remote-parser>
 
       <div class="row align-items-center flex-end ">
         <photon-backend-info 
-            backend='${backend}' 
-            conf='${conf}' 
-            on-backend-change='${(evt) => {
+            .backend=${this.backend} 
+            .conf=${this.conf} 
+            @backend-change="${(evt) => {
               if (this.debug) {
                 console.log('[photon-query] on-backend-change', evt.detail);
               }
               this.backend = evt.detail;
-            }}'
-            on-keypress="${(evt) => evt.stopPropagation()}"
-            on-keydown="${(evt) => evt.stopPropagation()}"
-            on-keyup="${(evt) => evt.stopPropagation()}"
-            debug='${debug}'></photon-backend-info>
+            }}"
+            @keypress="${(evt) => evt.stopPropagation()}"
+            @keydown="${(evt) => evt.stopPropagation()}"
+            @keyup="${(evt) => evt.stopPropagation()}"
+            .debug=${this.debug}></photon-backend-info>
         
         <mwc-icon class="help"
-            on-click="${()=>this._help()}">help</mwc-icon>
+            @click="${()=>this._help()}">help</mwc-icon>
       </div>
 
 
 
       <photon-hotkeys
-          on-execute='${() => this.queryEditor.execute()}'
-          on-select-all='${() => this.queryEditor.selectAll()}'
-          on-select-none='${() => this.queryEditor.selectNone()}'
-          on-select-regexp='${(evt) => this.queryEditor.selectRegExp(evt.detail)}'
-          debug='${debug}'
+          @execute="${() => this.queryEditor.execute()}"
+          @select-all="${() => this.queryEditor.selectAll()}"
+          @select-none="${() => this.queryEditor.selectNone()}"
+          @select-regexp="${(evt) => this.queryEditor.selectRegExp(evt.detail)}"
+          .debug=${this.debug}
           ></photon-hotkeys>
 
       <photon-query-editor
           id="photon-query-editor"
-          backend='${backend}'    
-          warpscript='${warpscript}'
-          debug='${debug}'
-          on-exec='${(evt) => this._onExec(evt)}'
+          .backend=${this.backend}    
+          .warpscript=${this.warpscript}
+          .debug=${this.debug}
+          @exec='${(evt) => this._onExec(evt)}'
           cloak
           >
       </photon-query-editor>
@@ -82,7 +82,7 @@ class PhotonQuery extends LitElement {
       /**
        * The WarpScript script
        */
-      warpscript: String,
+      warpscript: {type: String},
       /**
         * The choosen backend
         *  The `backend` object is composed of:
@@ -98,13 +98,13 @@ class PhotonQuery extends LitElement {
         *
         *  @type Backend
         */
-      backend: Object,
+      backend: {type: Object},
       /**
        * The parsed configuration file
        */
-      conf: Object,
-      confPath: String,
-      debug: Boolean,
+      conf: {type: Object},
+      confPath: {type: String},
+      debug: {type: Boolean},
     };
   }
 
@@ -144,7 +144,7 @@ class PhotonQuery extends LitElement {
         this.backend;
     this.backend = decodedPermalink.backend || this.backend;    
     this.warpscript = decodedPermalink.warpscript || lastExecWarpsacript || this.innerHTML || this.warpscript || '';
-    this.queryEditor = this._root.querySelector('#photon-query-editor');
+    this.queryEditor = this.renderRoot.querySelector('#photon-query-editor');
     this.removeAttribute('cloak');
   }
 
@@ -199,7 +199,7 @@ class PhotonQuery extends LitElement {
 
 
   _help() {
-      this._root.querySelector('photon-hotkeys')._hotkeysHelp = true;
+      this.renderRoot.querySelector('photon-hotkeys')._hotkeysHelp = true;
   }
   
 

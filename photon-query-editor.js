@@ -26,8 +26,8 @@ import shortcuts from '@lostinbrittany/shortcuts';
  * @customElement
  */
 class PhotonQueryEditor extends LitElement {
-  _render({warpscript, backend, response, debug, _plottedPaths}) {
-    console.log('rendering backend', backend)
+  render() {
+    console.log('rendering backend', this.backend)
     return html`
       ${photonSharedStyles}
       ${this._renderElementStyles()}
@@ -38,26 +38,28 @@ class PhotonQueryEditor extends LitElement {
             id="editor"
             theme="ace/theme/eclipse"
             mode="ace/mode/warpscript"
-            softtabs="true"
-            wrap="true"
+            softtabs
+            wrap
             placeholder="Type your WarpScript here..."
-            on-editor-content="${(evt) => this.editorChangeAction(evt)}"
-            on-keypress="${(evt) => evt.stopPropagation()}"
-            on-keydown="${(evt) => evt.stopPropagation()}"
-            on-keyup="${(evt) => evt.stopPropagation()}"
+            @editor-content="${(evt) => this.editorChangeAction(evt)}"
+            @keypress="${(evt) => evt.stopPropagation()}"
+            @keydown="${(evt) => evt.stopPropagation()}"
+            @keyup="${(evt) => evt.stopPropagation()}"
             initial-focus
-            value="${warpscript}"
-            debug="${debug}"> 
+            .value=${this.warpscript}
+            .debug=${this.debug}> 
         </ace-widget>   
       </div>
       <div class='row flex-end'>
-        <mwc-button id='execButton' icon="send" 
-            on-click="${(evt) => this.execute()}"
-            raised>Execute</mwc-button>
+        <mwc-button id='execButton' 
+            icon="send" 
+            label="Execute"
+            @click="${(evt) => this.execute()}"
+            raised></mwc-button>
       </div>
       ${
         this.response ?
-        this._renderResponse(response, _plottedPaths)
+        this._renderResponse(this.response, this._plottedPaths)
         : ''}
     `;
   }
@@ -80,7 +82,7 @@ class PhotonQueryEditor extends LitElement {
       /**
        * The WarpScript script
        */
-      warpscript: String,
+      warpscript: {type: String},
       /**
         * The choosen backend
         *  The `backend` object is composed of:
@@ -96,17 +98,17 @@ class PhotonQueryEditor extends LitElement {
         *
         *  @type Backend
         */
-      backend: Object,
+      backend: {type: Object},
       /**
        * Elapsed time for the call
        */
-      elapsed: Number,
-      response: Object,
-      debug: Boolean,
+      elapsed: {type: Number},
+      response: {type: Object},
+      debug: {type: Boolean},
       /**
        * The paths of the timeseries to plot
        */
-      _plottedPaths: Array,
+      _plottedPaths: {type: Array},
     };
   }
 
@@ -114,15 +116,14 @@ class PhotonQueryEditor extends LitElement {
     super();
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  firstUpdated() {   
     if (this.debug) {
-      console.debug('[photon-query-editor] connectedCallback');
+      console.debug('[photon-query-editor] firstUpdated', this.renderRoot, this.renderRoot.querySelector('div'));
     }
     this.warpscript = this.innerHTML || this.warpscript || '';
     this.$ = {
-      editor: this.shadowRoot.querySelector('#editor'),
-      warpscriptcaller: this.shadowRoot.querySelector('#warpscriptcaller'),
+      editor: this.renderRoot.querySelector('#editor'),
+      warpscriptcaller: this.renderRoot.querySelector('#warpscriptcaller'),
     };
     this.removeAttribute('cloak');
 
@@ -168,7 +169,7 @@ class PhotonQueryEditor extends LitElement {
     if (this.debug) {
       console.debug('[photon-query-editor] Execute', this.warpscript);
     }
-    this._root.querySelector('#execButton').blur();
+    this.renderRoot.querySelector('#execButton').blur();
     this.dispatchEvent(new CustomEvent('exec', {
       detail: {
         warpscript: this.warpscript,
@@ -450,6 +451,7 @@ class PhotonQueryEditor extends LitElement {
         background-color: var(--app-primary-color);
         color: var(--app-primary-contrast);
         margin: 5px;
+        --mdc-theme-primary: var(--app-primary-contrast);
       }
       mwc-button iron-icon {
         padding-right: 10px;

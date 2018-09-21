@@ -101,7 +101,7 @@ export class Textfield extends ComponentElement {
 
   firstUpdated() {
     super.firstUpdated();
-    this._input = this.shadowRoot.querySelector('input');
+    this._input = this.renderRoot.querySelector('input');
   }
 
   get valid() {

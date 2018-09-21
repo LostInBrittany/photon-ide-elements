@@ -78,7 +78,7 @@ class PhotonResponseInspector extends LitElement {
 
   render() {
     if (this.debug) {
-      console.log('[photon-response-inspector] _render begin');
+      console.log('[photon-response-inspector] render begin', this.stack);
     }
     let iterator = createIterator(true);
     return html`
@@ -96,14 +96,14 @@ class PhotonResponseInspector extends LitElement {
               <div class="line-content-container">
                 <div 
                     class="line-content" 
-                    on-plot-ts='${(evt) => this._onPlotTs(evt.detail, index)}'>
+                    @plot-ts='${(evt) => this._onPlotTs(evt.detail, index)}'>
                   <granite-inspector-tree-view
-                      data=${line}
-                      expandLevel=0
-                      expandPath=''
-                      sortObjectKeys='true'
-                      this.nodeRenderer=${this.nodeRenderer}
-                      dataIterator=${iterator}></granite-inspector-tree-view>
+                      .data=${line}
+                      .expandLevel=0
+                      .expandPath=${false}
+                      .sortObjectKeys=${true}
+                      .nodeRenderer=${this.nodeRenderer}
+                      .dataIterator=${iterator}></granite-inspector-tree-view>
                 </div>
               </div>
             </div>

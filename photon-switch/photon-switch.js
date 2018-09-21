@@ -55,7 +55,7 @@ export class Switch extends LitElement {
   async ready() {
     super.ready();
     await afterNextRender;
-    this._input = this._root.querySelector('input');
+    this._input = this.renderRoot.querySelector('input');
   }
 
   click() {

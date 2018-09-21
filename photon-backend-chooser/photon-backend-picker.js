@@ -7,6 +7,9 @@ import '../photon-textfield/photon-textfield';
 
 class PhotonBackendPicker extends LitElement {
   render() {
+    if (this.debug) {
+      console.log('[photon-backend-picker] render', this.backend)
+    }
     if (!this.backend || !this.customBackend) {
       return;
     }
@@ -20,10 +23,10 @@ class PhotonBackendPicker extends LitElement {
           ${this._savedBackends.map((item, index) => html`
             <div class='flex align-items-center'>
               <mwc-radio 
-                  id$='backend_${item.id}'
-                  value='backend_${item.id}'
-                  name='backendRadioGroup' 
-                  checked?='${this._equalBackends(this.backend, item)}'
+                  id='backend_${item.id}'
+                  .value='backend_${item.id}'
+                  .name='backendRadioGroup' 
+                  ?checked='${this._equalBackends(this.backend, item)}'
                   @click='${()=>this._onBackendChosen(item)}'></mwc-radio>        
               <div class='backendRadioGroupItem'>
                 <div class="backend_label">${item.label}</div>
@@ -43,10 +46,10 @@ class PhotonBackendPicker extends LitElement {
           ${this.conf.backends.map((item) => html`
             <div class='flex align-items-center'>
               <mwc-radio 
-                  id$='backend_${item.id}'
-                  value='backend_${item.id}'
-                  name='backendRadioGroup' 
-                  checked?='${this._equalBackends(this.backend, item)}'
+                  id='backend_${item.id}'
+                  .value='backend_${item.id}'
+                  .name='backendRadioGroup' 
+                  ?checked='${this._equalBackends(this.backend, item)}'
                   @click='${()=>this._onBackendChosen(item)}'></mwc-radio>        
               <div class='backendRadioGroupItem'>
                 <div class="backend_label">${item.label}</div>
@@ -60,16 +63,16 @@ class PhotonBackendPicker extends LitElement {
       <h3>Custom backend</h3>
       <div class='flex align-items-center'>
         <mwc-radio 
-            id$='custom_backend'
-            value='custom_backend'
-            name='backendRadioGroup' 
-            checked?='${this._isCustomBackend()}'
+            id='custom_backend'
+            .value='custom_backend'
+            .name='backendRadioGroup' 
+            ?checked='${this._isCustomBackend()}'
             @click='${()=>this._onCustomBackendChosen()}'></mwc-radio>         
         <div class='backendRadioGroupItem'>   
           <div class='flex align-items-center'>
             <photon-textfield 
                 class="custom-backend-url" 
-                label="Backend URL" 
+                .label="Backend URL" 
                 @change="${(evt) => {
                   let _backend = { ...this.customBackend, url: evt.detail, id: '' };
                   this.customBackend = _backend;
@@ -81,7 +84,7 @@ class PhotonBackendPicker extends LitElement {
                 value="${this.customBackend.url}"></photon-textfield>
             <photon-textfield 
                 class="custom-backend-execEndpoint" 
-                label="Exec endpoint" 
+                .label="Exec endpoint" 
                 @change="${(evt) => {
                   let _backend = { ...this.customBackend, execEndpoint: evt.detail, id: '' };
                   this.customBackend = _backend;
@@ -90,12 +93,12 @@ class PhotonBackendPicker extends LitElement {
                     console.log('[photon-backend-picker] Exec endpoint changed', this.backend, evt.detail);
                   }
                 }}"
-                value="${this.customBackend.execEndpoint}"></photon-textfield>
+                .value="${this.customBackend.execEndpoint}"></photon-textfield>
           </div>
           <div class='flex align-items-center'>
             <photon-textfield 
                 class="custom-backend-label" 
-                label="Label" 
+                .label="Label" 
                 @change="${(evt) => {
                   let _backend = { ...this.customBackend, label: evt.detail, id: '' };
                   this.customBackend = _backend;
@@ -104,7 +107,7 @@ class PhotonBackendPicker extends LitElement {
                     console.log('[photon-backend-picker] Label changed', this.backend, evt.detail);
                   }
                 }}"
-                value="${this.customBackend.label}"></photon-textfield>
+                .value="${this.customBackend.label}"></photon-textfield>
           </div>
         </div>
         ${(this._customBackendChoosen || this._isCustomBackend()) ? html`
@@ -115,14 +118,14 @@ class PhotonBackendPicker extends LitElement {
     `;
   }
 
-  updated(props, changedProps, prevProps) {
-    if (changedProps.backend !== undefined) {
+  updated(changedProps) {
+    if (changedProps.get('backend') !== undefined) {
       if (this.debug) {
-        console.log('[photon-backend-picker] _didRender - backend changed', changedProps.backend);
+        console.log('[photon-backend-picker] updated - backend changed', this.backend);
       }
       this._delayedFireEvent(new CustomEvent(
           'backend-change',
-          {detail: changedProps.backend, bubbles: true, composed: true})
+          {detail: this.backend, bubbles: true, composed: true})
       );
     }
   }
@@ -181,15 +184,6 @@ class PhotonBackendPicker extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-  }
-
-
-  get customBackend() {
-    return this._getProperty('customBackend');
-  }
-
-  set customBackend(value) {
-    this._setProperty('customBackend', value);
   }
 
   async _delayedFireEvent(evt) {

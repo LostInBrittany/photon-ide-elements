@@ -75,7 +75,7 @@ let modalStyles = html`
 `;
 
 class PhotonHotkeyRegexp extends LitElement {
-  _render() {
+  render() {
     return html`
       ${photonSharedStyles} ${modalStyles}
       <div 
@@ -116,7 +116,7 @@ class PhotonHotkeyRegexp extends LitElement {
     super.connectedCallback();
     this._regexp = '';
     this._setHotkeys();
-    this._root.querySelector('photon-textfield').focus();
+    this.renderRoot.querySelector('photon-textfield').focus();
   }
 
   // ***************************************************************************

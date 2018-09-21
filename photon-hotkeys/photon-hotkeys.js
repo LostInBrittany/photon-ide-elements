@@ -9,7 +9,7 @@ class PhotonHotkeys extends LitElement {
   static get properties() {
     return {
       _hotkeysRegexp: {type: Boolean},
-      _hotkeysHelp: {type: Boolean},
+      hotkeysHelp: {type: Boolean},
     };
   }
 
@@ -64,7 +64,7 @@ class PhotonHotkeys extends LitElement {
     shortcuts.add('h', (evt) => {
       this.hotkeyHandlerWrapper(evt, 'help',
         () => {
-          this._hotkeysHelp = true;
+          this.hotkeysHelp = true;
           this.dispatchEvent(new CustomEvent('help'));
         }
       );
@@ -74,7 +74,7 @@ class PhotonHotkeys extends LitElement {
     shortcuts.add('esc', (evt) => {
       this.hotkeyHandlerWrapper(evt, 'close',
         () => {
-          this._hotkeysHelp = false;
+          this.hotkeysHelp = false;
           this._hotkeysRegexp = false;
           this.dispatchEvent(new CustomEvent('close'));
         },
@@ -94,11 +94,12 @@ class PhotonHotkeys extends LitElement {
   }
 
   render() {
-    if (this._hotkeysHelp) {
+    if (this.hotkeysHelp) {
       return html`
         <photon-hotkeys-help
             id="hotkeyHelp"
-            @close='${() => this._hotkeysHelp = false }'></photon-hotkeys-help>
+            @close='${() => this.hotkeysHelp = false }'
+            open></photon-hotkeys-help>
       `;
     }
     if (this._hotkeysRegexp) {

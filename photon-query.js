@@ -121,8 +121,7 @@ class PhotonQuery extends LitElement {
     this.confPath = `${this.importPath()}photon-conf.yaml`;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  firstUpdated() {    
     this.initBackend();
 
 
@@ -197,7 +196,10 @@ class PhotonQuery extends LitElement {
 
 
   _help() {
-      this.renderRoot.querySelector('photon-hotkeys')._hotkeysHelp = true;
+    if (this.debug) {
+      console.debug('[photon-query] _help', this.renderRoot.querySelector('photon-hotkeys'));
+    }
+    this.renderRoot.querySelector('photon-hotkeys').hotkeysHelp = true;
   }
   
 

@@ -451,7 +451,8 @@ class PhotonQueryEditor extends LitElement {
         background-color: var(--app-primary-color);
         color: var(--app-primary-contrast);
         margin: 5px;
-        --mdc-theme-primary: var(--app-primary-contrast);
+        --mdc-theme-on-primary: var(--app-primary-contrast);
+        --mdc-theme-primary: var(--app-primary-color);
       }
       mwc-button iron-icon {
         padding-right: 10px;

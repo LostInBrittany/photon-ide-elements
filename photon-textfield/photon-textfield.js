@@ -14,9 +14,8 @@ limitations under the License.
 import {ComponentElement, html} from '@material/mwc-base/component-element.js';
 import {classMap} from 'lit-html/directives/classMap.js';
 import {MDCWebComponentMixin} from '@material/mwc-base/mdc-web-component.js';
-import {MDCTextField} from '@material/textfield';
+import {MDCTextField} from '@material/textfield/index.js';
 import {style} from './photon-textfield-css.js';
-import {afterNextRender} from '@material/mwc-base/utils.js';
 import '@material/mwc-icon/mwc-icon-font.js';
 
 class MDCWCTextField extends MDCWebComponentMixin(MDCTextField) {}
@@ -101,7 +100,7 @@ export class Textfield extends ComponentElement {
 
   firstUpdated() {
     super.firstUpdated();
-    this._input = this.renderRoot.querySelector('input');
+    this._input = this.shadowRoot.querySelector('input');
   }
 
   get valid() {

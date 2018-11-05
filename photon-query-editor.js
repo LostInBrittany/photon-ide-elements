@@ -9,6 +9,7 @@ import PhotonWarpscriptExec from '@photon-elements/photon-tools/photon-warpscrip
 import '@granite-elements/ace-widget/ace-widget';
 import '@granite-elements/granite-alert/granite-alert';
 import '@granite-elements/granite-yaml/granite-yaml-remote-parser';
+import  '@granite-elements/granite-spinner/granite-spinner';
 
 import './photon-ace-mode-warpscript';
 
@@ -16,6 +17,7 @@ import './photon-response-inspector/photon-response-inspector';
 import './photon-response-plot/photon-response-plot';
 
 import './photon-backend-chooser/photon-backend-info';
+
 
 import timeseriesTools from '@photon-elements/photon-tools/photon-timeseries-tools';
 import permalinkTools from '@photon-elements/photon-tools/photon-permalink-tools';
@@ -32,7 +34,16 @@ class PhotonQueryEditor extends LitElement {
       ${photonSharedStyles}
       ${this._renderElementStyles()}
 
-          <slot></slot>
+      ${
+        this._executing ?
+        html`
+          <div class='spinner'>
+            <granite-spinner active hover></granite-spinner>
+          </div>
+        ` :
+        ''
+      }
+      
       <div class='row'>
         <ace-widget
             id="editor"
@@ -109,6 +120,7 @@ class PhotonQueryEditor extends LitElement {
        * The paths of the timeseries to plot
        */
       _plottedPaths: {type: Array},
+      _executing: { type: Boolean },
     };
   }
 
@@ -178,6 +190,7 @@ class PhotonQueryEditor extends LitElement {
       bubbles: true,
       composed: true,
     }));    
+    this._executing = true;
     PhotonWarpscriptExec
       .exec(`${this.backend.url}${this.backend.execEndpoint}`, this.warpscript)
       .then((response) => this._handleResponse(response))
@@ -197,6 +210,7 @@ class PhotonQueryEditor extends LitElement {
       bubbles: true,
       composed: true,
     }));
+    this._executing = false;
     this.response = response;
     if (this._plottedPaths) {
       let plottedPaths = {};
@@ -221,6 +235,7 @@ class PhotonQueryEditor extends LitElement {
       bubbles: true,
       composed: true,
     }));
+    this._executing = false;
     this.response = error;
 
     if (this.debug) {

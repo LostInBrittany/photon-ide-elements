@@ -8,6 +8,7 @@
     "@granite-elements/granite-alert": "2.1.2",
     "@granite-elements/granite-c3": "^3.2.0",
     "@granite-elements/granite-inspector": "^1.3.0",
+    "@granite-elements/granite-spinner": "^3.0.0",
     "@granite-elements/granite-yaml": "^2.0.1",
     "@lostinbrittany/shortcuts": "^1.1.2",
     "@material/mwc-button": "^0.3.1",
@@ -25,5 +26,5 @@
     "@webcomponents/webcomponentsjs": "^2.1.3",
     "wct-browser-legacy": "^1.0.2"
   },
-  "version": "1.2.0"
+  "version": "1.2.1"
 }
